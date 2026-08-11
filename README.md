@@ -8,10 +8,10 @@ Windows acceptance sequence is complete.
 
 ## Candidate installation for Codex
 
-Install the unpublished candidate from the public Integration Repository at its pinned branch:
+Install the unpublished candidate from the public Integration Repository at its immutable tag:
 
 ```sh
-codex plugin marketplace add QinMian5/project-graph-plugins --ref candidate/v0.1.0
+codex plugin marketplace add QinMian5/project-graph-plugins --ref v0.1.0
 codex plugin add project-graph@project-graph
 ```
 
@@ -38,10 +38,10 @@ pnpm trace:codex \
 ## Candidate installation for Claude Code
 
 Claude Code uses the same package root, release version, Shared Skill, adapter, and production
-payload. Add the candidate branch and install the Plugin with the default user scope:
+payload. Add the immutable candidate tag and install the Plugin with the default user scope:
 
 ```sh
-claude plugin marketplace add QinMian5/project-graph-plugins@candidate/v0.1.0
+claude plugin marketplace add QinMian5/project-graph-plugins@v0.1.0
 claude plugin install project-graph@project-graph
 ```
 
