@@ -41,6 +41,8 @@ test("one Integration Release metadata source drives the Codex package identity"
   ]);
   assert.equal(plugin.name, "project-graph");
   assert.equal(plugin.version, release.version);
+  assert.equal(plugin.homepage, "https://github.com/QinMian5/project-graph-plugins");
+  assert.equal(plugin.repository, "https://github.com/QinMian5/project-graph-plugins");
   assert.equal(plugin.interface.displayName, "Project Graph");
 });
 

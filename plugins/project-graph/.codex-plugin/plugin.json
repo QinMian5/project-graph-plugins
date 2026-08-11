@@ -6,8 +6,8 @@
     "name": "Graphif",
     "url": "https://github.com/graphif"
   },
-  "homepage": "https://github.com/graphif/project-graph-plugins",
-  "repository": "https://github.com/graphif/project-graph-plugins",
+  "homepage": "https://github.com/QinMian5/project-graph-plugins",
+  "repository": "https://github.com/QinMian5/project-graph-plugins",
   "license": "GPL-3.0-only",
   "skills": "./skills/",
   "interface": {

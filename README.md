@@ -6,20 +6,20 @@ No Integration Release has been promoted to `main` yet. Version `0.1.0` is devel
 `candidate/v0.1.0`; ordinary unpinned Marketplace users must not follow it until the macOS and
 Windows acceptance sequence is complete.
 
-## Local candidate installation for Codex
+## Candidate installation for Codex
 
-Until the `graphif` organization grants repository-creation permission, install the candidate from
-this checkout through the normal local Marketplace lifecycle:
+Install the unpublished candidate from the public Integration Repository at its pinned branch:
+
+```sh
+codex plugin marketplace add QinMian5/project-graph-plugins --ref candidate/v0.1.0
+codex plugin add project-graph@project-graph
+```
+
+For local development, add this checkout through the same Marketplace lifecycle instead:
 
 ```sh
 codex plugin marketplace add "$PWD"
 codex plugin add project-graph@project-graph
-```
-
-After the public repository exists, the equivalent candidate-ref command will be:
-
-```sh
-codex plugin marketplace add graphif/project-graph-plugins --ref candidate/v0.1.0
 ```
 
 The installed `project-graph` skill dynamically discovers tools and schemas before invoking the
