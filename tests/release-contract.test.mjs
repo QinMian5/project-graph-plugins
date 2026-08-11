@@ -17,10 +17,10 @@ test("one Integration Release metadata source drives both Host package identitie
 
   assert.deepEqual(release, {
     schemaVersion: 1,
-    version: "0.1.6",
+    version: "0.1.7",
     projectGraph: {
       repository: "https://github.com/QinMian5/project-graph",
-      revision: "0f22378bde6b752824a5c2455d238a6bfbc9e581",
+      revision: "b4dac5aed33f383597fff55efc56605bac2d03d5",
     },
     hostRuntime: {
       node: ">=22.13.0",
@@ -37,7 +37,7 @@ test("one Integration Release metadata source drives both Host package identitie
       "win32-x64": {
         ownershipHelper: {
           sourcePath: "app/src-tauri/target/release/project-graph-ownership-helper.exe",
-          sha256: "bf6035238edd1295c85bea2d6bf05cb96ba095cbcf7a0ec1ca3513ae09d0717a",
+          sha256: "0950509cad604770c0fd2d90966d09b8f3273ea9fd8b7b8fdeb6e878971d1801",
         },
       },
     },
