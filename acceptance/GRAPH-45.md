@@ -4,6 +4,8 @@ Date: 2026-08-11
 
 Candidate: `candidate/v0.1.0`
 
+Candidate package revision: `9b8877d1d0abdd12d827e0b41b22e355b60d1192`
+
 Integration Release: `0.1.0`
 
 Project Graph revision: `5e924e48111e4f4cd3d38135053416befde70bf9`
@@ -12,9 +14,11 @@ Target: `darwin-arm64`
 
 Bundled Node: `26.7.0`
 
-The candidate was installed through the local Codex Marketplace lifecycle as
-`project-graph@project-graph`. The tracer ran from the immutable installed Plugin root, not from
-the Project Graph workspace or the Integration Repository payload source.
+The candidate was installed from the public
+[`QinMian5/project-graph-plugins`](https://github.com/QinMian5/project-graph-plugins) repository at
+`candidate/v0.1.0` through the Codex Marketplace lifecycle as `project-graph@project-graph`. The
+tracer ran from the immutable installed Plugin root, not from the Project Graph workspace or the
+Integration Repository payload source.
 
 ```json
 {
@@ -40,7 +44,7 @@ the Project Graph workspace or the Integration Repository payload source.
 }
 ```
 
-The public GitHub candidate-ref step remains blocked: the authenticated GitHub account receives
-`HTTP 403: You need admin access to the organization before adding a repository to it.` when
-creating `graphif/project-graph-plugins`. `main` remains at the repository initialization commit;
-the Integration Release has not been promoted.
+The Marketplace reported its Git source as
+`https://github.com/QinMian5/project-graph-plugins.git`. The public repository's default `main`
+branch remains at initialization commit `c2661a4493fbcf6b62a4c68a62a11f59a26c3eb0`; the Integration
+Release has not been promoted.
