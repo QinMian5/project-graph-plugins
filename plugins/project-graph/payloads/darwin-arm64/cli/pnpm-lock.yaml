@@ -721,20 +721,20 @@ packages:
   '@floating-ui/utils@0.2.11':
     resolution: {integrity: sha512-RiB/yIh78pcIxl6lLMG0CgBXAZ2Y0eVHqMPYugu+9U0AeT6YBeiJpf7lbdJNIugFP5SIjwNRgo4DhR1Qxi26Gg==}
 
-  '@graphif/data-structures@file:///Volumes/WD-Black-4TB/Code/project-graph/packages/data-structures':
-    resolution: {directory: ../../../../../../project-graph/packages/data-structures, type: directory}
+  '@graphif/data-structures@file:///private/tmp/project-graph-47-macos-source/packages/data-structures':
+    resolution: {directory: ../../../../../../../../../private/tmp/project-graph-47-macos-source/packages/data-structures, type: directory}
 
-  '@graphif/project-graph-cli@file:///Volumes/WD-Black-4TB/Code/project-graph/packages/project-graph-cli':
-    resolution: {directory: ../../../../../../project-graph/packages/project-graph-cli, type: directory}
+  '@graphif/project-graph-cli@file:///private/tmp/project-graph-47-macos-source/packages/project-graph-cli':
+    resolution: {directory: ../../../../../../../../../private/tmp/project-graph-47-macos-source/packages/project-graph-cli, type: directory}
 
-  '@graphif/project-graph@file:///Volumes/WD-Black-4TB/Code/project-graph/app':
-    resolution: {directory: ../../../../../../project-graph/app, type: directory}
+  '@graphif/project-graph@file:///private/tmp/project-graph-47-macos-source/app':
+    resolution: {directory: ../../../../../../../../../private/tmp/project-graph-47-macos-source/app, type: directory}
 
-  '@graphif/serializer@file:///Volumes/WD-Black-4TB/Code/project-graph/packages/serializer':
-    resolution: {directory: ../../../../../../project-graph/packages/serializer, type: directory}
+  '@graphif/serializer@file:///private/tmp/project-graph-47-macos-source/packages/serializer':
+    resolution: {directory: ../../../../../../../../../private/tmp/project-graph-47-macos-source/packages/serializer, type: directory}
 
-  '@graphif/shapes@file:///Volumes/WD-Black-4TB/Code/project-graph/packages/shapes':
-    resolution: {directory: ../../../../../../project-graph/packages/shapes, type: directory}
+  '@graphif/shapes@file:///private/tmp/project-graph-47-macos-source/packages/shapes':
+    resolution: {directory: ../../../../../../../../../private/tmp/project-graph-47-macos-source/packages/shapes, type: directory}
 
   '@headlessui/react@2.2.10':
     resolution: {integrity: sha512-5pVLNK9wlpxTUTy9GpgbX/SdcRh+HBnPktjM2wbiLTH4p+2EPHBO1aoSryUCuKUIItdDWO9ITlhUL8UnUN/oIA==}
@@ -3655,8 +3655,8 @@ packages:
       typescript:
         optional: true
 
-  create-extprg@file:///Volumes/WD-Black-4TB/Code/project-graph/packages/create-extprg:
-    resolution: {directory: ../../../../../../project-graph/packages/create-extprg, type: directory}
+  create-extprg@file:///private/tmp/project-graph-47-macos-source/packages/create-extprg:
+    resolution: {directory: ../../../../../../../../../private/tmp/project-graph-47-macos-source/packages/create-extprg, type: directory}
 
   cross-env@10.1.0:
     resolution: {integrity: sha512-GsYosgnACZTADcmEyJctkJIoqAhHjttw7RsFrVoJNXbsWWqaq6Ym+7kZjq6mS45O0jij6vtiReppKQEtqWy6Dw==}
@@ -4219,11 +4219,11 @@ packages:
   extend@3.0.2:
     resolution: {integrity: sha512-fjquC59cD7CyW6urNXK0FBufkZcoiGG80wTuPujX590cB5Ttln20E2UB4S/WARVqhXffZl2LNgS+gQdPIIim/g==}
 
-  extprg-types@file:///Volumes/WD-Black-4TB/Code/project-graph/packages/extprg-types:
-    resolution: {directory: ../../../../../../project-graph/packages/extprg-types, type: directory}
+  extprg-types@file:///private/tmp/project-graph-47-macos-source/packages/extprg-types:
+    resolution: {directory: ../../../../../../../../../private/tmp/project-graph-47-macos-source/packages/extprg-types, type: directory}
 
-  extprg@file:///Volumes/WD-Black-4TB/Code/project-graph/packages/extprg:
-    resolution: {directory: ../../../../../../project-graph/packages/extprg, type: directory}
+  extprg@file:///private/tmp/project-graph-47-macos-source/packages/extprg:
+    resolution: {directory: ../../../../../../../../../private/tmp/project-graph-47-macos-source/packages/extprg, type: directory}
 
   fast-content-type-parse@3.0.0:
     resolution: {integrity: sha512-ZvLdcY8P+N8mGQJahJV5G4U88CSvT1rP8ApL6uETe88MBXrBHAkZlSEySdUlyztF7ccb+Znos3TFqaepHxdhBg==}
@@ -5697,8 +5697,8 @@ packages:
   process-warning@5.0.0:
     resolution: {integrity: sha512-a39t9ApHNx2L4+HBnQKqxxHNs1r7KF+Intd8Q/g1bUh6q0WIp9voPXJ/x0j+ZL45KF1pJd9+q2jLIRMfvEshkA==}
 
-  project-graph@file:///Volumes/WD-Black-4TB/Code/project-graph:
-    resolution: {directory: ../../../../../../project-graph, type: directory}
+  project-graph@file:///private/tmp/project-graph-47-macos-source:
+    resolution: {directory: ../../../../../../../../../private/tmp/project-graph-47-macos-source, type: directory}
 
   prompts@2.4.2:
     resolution: {integrity: sha512-NxNv/kLguCA7p3jE8oL2aEBsrJWgAakBpgmgK6lpPWV+WuOmY6r2/zbAVnP+T8bQlA0nzHXSJSJW0Hq7ylaD2Q==}
@@ -7714,16 +7714,16 @@ snapshots:
 
   '@floating-ui/utils@0.2.11': {}
 
-  '@graphif/data-structures@file:///Volumes/WD-Black-4TB/Code/project-graph/packages/data-structures':
+  '@graphif/data-structures@file:///private/tmp/project-graph-47-macos-source/packages/data-structures':
     dependencies:
-      '@graphif/serializer': '@graphif/serializer@file:///Volumes/WD-Black-4TB/Code/project-graph/packages/serializer'
+      '@graphif/serializer': '@graphif/serializer@file:///private/tmp/project-graph-47-macos-source/packages/serializer'
       unplugin-original-class-name: 1.0.1(esbuild@0.28.1)(vite@8.0.16(@types/node@25.9.2)(esbuild@0.28.1)(jiti@2.6.1)(tsx@4.23.0)(yaml@2.8.4))
 
-  '@graphif/project-graph-cli@file:///Volumes/WD-Black-4TB/Code/project-graph/packages/project-graph-cli':
+  '@graphif/project-graph-cli@file:///private/tmp/project-graph-47-macos-source/packages/project-graph-cli':
     dependencies:
       tsx: 4.23.0
 
-  '@graphif/project-graph@file:///Volumes/WD-Black-4TB/Code/project-graph/app':
+  '@graphif/project-graph@file:///private/tmp/project-graph-47-macos-source/app':
     dependencies:
       '@ai-sdk/mcp': 1.0.61(zod@4.4.3)
       '@ai-sdk/openai-compatible': 2.0.45(zod@4.4.3)
@@ -7734,9 +7734,9 @@ snapshots:
       '@dnd-kit/sortable': 10.0.0(@dnd-kit/core@6.3.1(react-dom@19.2.7(react@19.2.7))(react@19.2.7))(react@19.2.7)
       '@dnd-kit/utilities': 3.2.2(react@19.2.7)
       '@emoji-mart/data': 1.2.1
-      '@graphif/data-structures': '@graphif/data-structures@file:///Volumes/WD-Black-4TB/Code/project-graph/packages/data-structures'
-      '@graphif/serializer': '@graphif/serializer@file:///Volumes/WD-Black-4TB/Code/project-graph/packages/serializer'
-      '@graphif/shapes': '@graphif/shapes@file:///Volumes/WD-Black-4TB/Code/project-graph/packages/shapes'
+      '@graphif/data-structures': '@graphif/data-structures@file:///private/tmp/project-graph-47-macos-source/packages/data-structures'
+      '@graphif/serializer': '@graphif/serializer@file:///private/tmp/project-graph-47-macos-source/packages/serializer'
+      '@graphif/shapes': '@graphif/shapes@file:///private/tmp/project-graph-47-macos-source/packages/shapes'
       '@headlessui/react': 2.2.10(react-dom@19.2.7(react@19.2.7))(react@19.2.7)
       '@modyfi/vite-plugin-yaml': 1.1.1(vite@8.0.16(@types/node@25.9.2)(esbuild@0.28.1)(jiti@2.6.1)(tsx@4.23.0)(yaml@2.8.4))
       '@msgpack/msgpack': 3.1.3
@@ -7901,16 +7901,16 @@ snapshots:
       yaml: 2.8.4
       zod: 4.4.3
 
-  '@graphif/serializer@file:///Volumes/WD-Black-4TB/Code/project-graph/packages/serializer':
+  '@graphif/serializer@file:///private/tmp/project-graph-47-macos-source/packages/serializer':
     dependencies:
       '@msgpack/msgpack': 3.1.3
       js-md5: 0.8.3
       reflect-metadata: 0.2.2
 
-  '@graphif/shapes@file:///Volumes/WD-Black-4TB/Code/project-graph/packages/shapes':
+  '@graphif/shapes@file:///private/tmp/project-graph-47-macos-source/packages/shapes':
     dependencies:
-      '@graphif/data-structures': '@graphif/data-structures@file:///Volumes/WD-Black-4TB/Code/project-graph/packages/data-structures'
-      '@graphif/serializer': '@graphif/serializer@file:///Volumes/WD-Black-4TB/Code/project-graph/packages/serializer'
+      '@graphif/data-structures': '@graphif/data-structures@file:///private/tmp/project-graph-47-macos-source/packages/data-structures'
+      '@graphif/serializer': '@graphif/serializer@file:///private/tmp/project-graph-47-macos-source/packages/serializer'
       unplugin-original-class-name: 1.0.1(esbuild@0.28.1)(vite@8.0.16(@types/node@25.9.2)(esbuild@0.28.1)(jiti@2.6.1)(tsx@4.23.0)(yaml@2.8.4))
 
   '@headlessui/react@2.2.10(react-dom@19.2.7(react@19.2.7))(react@19.2.7)':
@@ -10759,7 +10759,7 @@ snapshots:
     optionalDependencies:
       typescript: 5.9.2
 
-  create-extprg@file:///Volumes/WD-Black-4TB/Code/project-graph/packages/create-extprg:
+  create-extprg@file:///private/tmp/project-graph-47-macos-source/packages/create-extprg:
     dependencies:
       '@clack/prompts': 0.10.1
       cac: 7.0.0
@@ -11472,10 +11472,10 @@ snapshots:
 
   extend@3.0.2: {}
 
-  extprg-types@file:///Volumes/WD-Black-4TB/Code/project-graph/packages/extprg-types:
+  extprg-types@file:///private/tmp/project-graph-47-macos-source/packages/extprg-types:
     dependencies:
-      '@graphif/data-structures': '@graphif/data-structures@file:///Volumes/WD-Black-4TB/Code/project-graph/packages/data-structures'
-      '@graphif/shapes': '@graphif/shapes@file:///Volumes/WD-Black-4TB/Code/project-graph/packages/shapes'
+      '@graphif/data-structures': '@graphif/data-structures@file:///private/tmp/project-graph-47-macos-source/packages/data-structures'
+      '@graphif/shapes': '@graphif/shapes@file:///private/tmp/project-graph-47-macos-source/packages/shapes'
       '@msgpack/msgpack': 3.1.3
       '@tauri-apps/plugin-dialog': 2.7.1
       '@tauri-apps/plugin-fs': 2.5.1
@@ -11493,7 +11493,7 @@ snapshots:
       vscode-uri: 3.1.0
       zod: 4.4.3
 
-  extprg@file:///Volumes/WD-Black-4TB/Code/project-graph/packages/extprg:
+  extprg@file:///private/tmp/project-graph-47-macos-source/packages/extprg:
     dependencies:
       '@msgpack/msgpack': 3.1.3
       '@zip.js/zip.js': 2.8.26
@@ -13348,7 +13348,7 @@ snapshots:
 
   process-warning@5.0.0: {}
 
-  project-graph@file:///Volumes/WD-Black-4TB/Code/project-graph: {}
+  project-graph@file:///private/tmp/project-graph-47-macos-source: {}
 
   prompts@2.4.2:
     dependencies:

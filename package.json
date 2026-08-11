@@ -11,6 +11,8 @@
     "sync-release": "node scripts/sync-release.mjs",
     "check:release": "node scripts/sync-release.mjs --check",
     "materialize:darwin-arm64": "node scripts/materialize-candidate.mjs",
+    "materialize:win32-x64": "node scripts/materialize-candidate.mjs",
+    "smoke:closed": "node scripts/run-closed-project-smoke.mjs",
     "trace:codex": "node scripts/run-host-tracer.mjs",
     "trace:claude": "node scripts/run-host-tracer.mjs",
     "test": "node --test"

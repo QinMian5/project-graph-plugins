@@ -17,10 +17,10 @@ test("one Integration Release metadata source drives both Host package identitie
 
   assert.deepEqual(release, {
     schemaVersion: 1,
-    version: "0.1.0",
+    version: "0.1.1",
     projectGraph: {
-      repository: "https://github.com/graphif/project-graph",
-      revision: "5e924e48111e4f4cd3d38135053416befde70bf9",
+      repository: "https://github.com/QinMian5/project-graph",
+      revision: "7d54c924cdda6bec5095b1a8206096ea9843442a",
     },
     targets: {
       "darwin-arm64": {
@@ -32,6 +32,17 @@ test("one Integration Release metadata source drives both Host package identitie
           version: "26.7.0",
           archive: "node-v26.7.0-darwin-arm64.tar.gz",
           sha256: "7ee659a7768e641bbfd5360940660b8e8fd0052f77488f365562bac522fc15d4",
+        },
+      },
+      "win32-x64": {
+        ownershipHelper: {
+          sourcePath: "app/src-tauri/target/release/project-graph-ownership-helper.exe",
+          sha256: "aec1221c854091c9e785bffa7aec392b6ccc43c03913417df18a6aa8af4402ce",
+        },
+        node: {
+          version: "26.7.0",
+          archive: "node-v26.7.0-win-x64.zip",
+          sha256: "d3bd72755141ed32bbcd841228ee81897c8a98d50dfa7dae2179399a0a7c90f8",
         },
       },
     },

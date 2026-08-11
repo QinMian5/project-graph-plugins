@@ -27,7 +27,7 @@ async function assertNoSymlinks(directory) {
   for (const entry of await readdir(directory, { withFileTypes: true })) {
     const path = resolve(directory, entry.name);
     const metadata = await lstat(path);
-    assert.equal(metadata.isSymbolicLink(), false, `${path} is a symlink that Codex installation would omit`);
+    assert.equal(metadata.isSymbolicLink(), false, `${path} is a symlink that Host installation would omit`);
     if (metadata.isDirectory()) await assertNoSymlinks(path);
   }
 }
@@ -91,7 +91,7 @@ test("the shared Host package contains a self-contained darwin-arm64 production 
     },
     ownershipHelper: release.targets["darwin-arm64"].ownershipHelper,
     packageTransformations: [
-      "flatten pnpm production dependencies for Codex installation",
+      "flatten pnpm production dependencies for Host installation",
       "remove package-manager command shims",
     ],
     materializer: "pnpm --filter @graphif/project-graph materialize:cli",

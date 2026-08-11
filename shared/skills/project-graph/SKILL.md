@@ -5,8 +5,9 @@ description: Use the bundled Project Graph CLI to discover or invoke built-in to
 
 # Use Project Graph
 
-Resolve `../../bin/project-graph` relative to this `SKILL.md` and run that adapter. The adapter selects
-the package-local payload. Do not ask the user to install a CLI, Node.js, pnpm, or change `PATH`.
+Resolve `../../bin/project-graph` relative to this `SKILL.md` on macOS, or
+`../../bin/project-graph.cmd` on Windows, and run that adapter. The adapter selects the package-local
+payload. Do not ask the user to install a CLI, Node.js, pnpm, or change `PATH`.
 
 Before a project invocation, obtain an explicit `.prg` Project Path from the user or task context.
 Treat the path as invocation input. Do not infer it from the foreground window, active tab, current

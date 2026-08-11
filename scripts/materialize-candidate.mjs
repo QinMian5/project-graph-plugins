@@ -25,17 +25,18 @@ const projectGraphRoot = resolve(
   sourceIndex === -1 ? join(repositoryRoot, "../project-graph") : arguments_[sourceIndex + 1],
 );
 const release = JSON.parse(await readFile(join(repositoryRoot, "release.json"), "utf8"));
-const target = "darwin-arm64";
+const target =
+  process.platform === "darwin" && process.arch === "arm64"
+    ? "darwin-arm64"
+    : process.platform === "win32" && process.arch === "x64"
+      ? "win32-x64"
+      : undefined;
 const targetMetadata = release.targets[target];
 const helperIndex = arguments_.indexOf("--ownership-helper");
-const helperPath = resolve(
-  helperIndex === -1
-    ? join(projectGraphRoot, targetMetadata.ownershipHelper.sourcePath)
-    : arguments_[helperIndex + 1],
-);
+let helperPath;
 const pluginRoot = join(repositoryRoot, "plugins/project-graph");
 const payloadParent = join(pluginRoot, "payloads");
-const payloadRoot = join(payloadParent, target);
+const payloadRoot = join(payloadParent, target ?? "unsupported");
 const downloadDirectory = await mkdtemp(join(tmpdir(), "project-graph-node-runtime-"));
 const runtimeSymbolPrefixes = ["_napi_", "_node_api_", "_node_module_", "_uv_"];
 let stagingRoot;
@@ -63,10 +64,13 @@ async function removePackageManagerCommandShims(directory) {
 }
 
 try {
-  if (process.platform !== "darwin" || process.arch !== "arm64") {
-    throw new Error("darwin-arm64 payloads must be materialized on darwin-arm64");
-  }
+  if (!target) throw new Error("payloads must be materialized on a supported target");
   if (!targetMetadata) throw new Error(`release metadata does not define ${target}`);
+  helperPath = resolve(
+    helperIndex === -1
+      ? join(projectGraphRoot, targetMetadata.ownershipHelper.sourcePath)
+      : arguments_[helperIndex + 1],
+  );
 
   const projectGraphRevision = run("git", ["-C", projectGraphRoot, "rev-parse", "HEAD"]).trim();
   if (projectGraphRevision !== release.projectGraph.revision) {
@@ -98,24 +102,38 @@ try {
   if (archiveHash !== targetMetadata.node.sha256) throw new Error("Node archive checksum does not match release metadata");
   const archivePath = join(downloadDirectory, targetMetadata.node.archive);
   await writeFile(archivePath, archive);
-  run("/usr/bin/tar", ["-xzf", archivePath, "-C", downloadDirectory]);
+  if (target === "darwin-arm64") {
+    run("/usr/bin/tar", ["-xzf", archivePath, "-C", downloadDirectory]);
+  } else {
+    run("tar.exe", ["-xf", archivePath, "-C", downloadDirectory]);
+  }
 
   const extractedNodeRoot = join(
     downloadDirectory,
-    targetMetadata.node.archive.replace(/\.tar\.gz$/, ""),
+    targetMetadata.node.archive.replace(/\.(?:tar\.gz|zip)$/, ""),
   );
-  const bundledNodePath = join(stagingRoot, "bin/node");
-  await copyFile(join(extractedNodeRoot, "bin/node"), bundledNodePath);
+  const bundledNodePath = join(stagingRoot, target === "darwin-arm64" ? "bin/node" : "bin/node.exe");
+  await copyFile(
+    join(extractedNodeRoot, target === "darwin-arm64" ? "bin/node" : "node.exe"),
+    bundledNodePath,
+  );
   await chmod(bundledNodePath, 0o755);
-  const runtimeSymbols = run("/usr/bin/nm", ["-gj", bundledNodePath])
-    .split("\n")
-    .filter((symbol) => runtimeSymbolPrefixes.some((prefix) => symbol.startsWith(prefix)))
-    .sort();
-  if (runtimeSymbols.length === 0) throw new Error("Node runtime symbol allowlist is empty");
-  const runtimeSymbolsPath = join(downloadDirectory, "runtime-symbols.txt");
-  await writeFile(runtimeSymbolsPath, `${runtimeSymbols.join("\n")}\n`);
-  run("/usr/bin/strip", ["-u", "-r", "-s", runtimeSymbolsPath, bundledNodePath]);
-  run("/usr/bin/codesign", ["--force", "--sign", "-", bundledNodePath]);
+  const nodeTransformations = [];
+  if (target === "darwin-arm64") {
+    const runtimeSymbols = run("/usr/bin/nm", ["-gj", bundledNodePath])
+      .split("\n")
+      .filter((symbol) => runtimeSymbolPrefixes.some((prefix) => symbol.startsWith(prefix)))
+      .sort();
+    if (runtimeSymbols.length === 0) throw new Error("Node runtime symbol allowlist is empty");
+    const runtimeSymbolsPath = join(downloadDirectory, "runtime-symbols.txt");
+    await writeFile(runtimeSymbolsPath, `${runtimeSymbols.join("\n")}\n`);
+    run("/usr/bin/strip", ["-u", "-r", "-s", runtimeSymbolsPath, bundledNodePath]);
+    run("/usr/bin/codesign", ["--force", "--sign", "-", bundledNodePath]);
+    nodeTransformations.push(
+      "strip -u -r preserving napi_, node_api_, node_module_, and uv_ symbols",
+      "codesign --force --sign -",
+    );
+  }
   await copyFile(join(extractedNodeRoot, "LICENSE"), join(stagingRoot, "licenses/node-LICENSE"));
   await copyFile(
     join(projectGraphRoot, "app/LICENSE"),
@@ -123,7 +141,7 @@ try {
   );
 
   run(
-    "pnpm",
+    process.platform === "win32" ? "pnpm.exe" : "pnpm",
     ["--silent", "--filter", "@graphif/project-graph", "materialize:cli", "--outDir", join(stagingRoot, "cli")],
     {
       cwd: projectGraphRoot,
@@ -162,14 +180,11 @@ try {
     node: {
       ...targetMetadata.node,
       source: nodeUrl,
-      transformations: [
-        "strip -u -r preserving napi_, node_api_, node_module_, and uv_ symbols",
-        "codesign --force --sign -",
-      ],
+      transformations: nodeTransformations,
     },
     ownershipHelper: targetMetadata.ownershipHelper,
     packageTransformations: [
-      "flatten pnpm production dependencies for Codex installation",
+      "flatten pnpm production dependencies for Host installation",
       "remove package-manager command shims",
     ],
     materializer: "pnpm --filter @graphif/project-graph materialize:cli",

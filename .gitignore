@@ -2,4 +2,6 @@
 node_modules/
 !plugins/project-graph/payloads/darwin-arm64/cli/node_modules/
 !plugins/project-graph/payloads/darwin-arm64/cli/node_modules/**
+!plugins/project-graph/payloads/win32-x64/cli/node_modules/
+!plugins/project-graph/payloads/win32-x64/cli/node_modules/**
 *.log

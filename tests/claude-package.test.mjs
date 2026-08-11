@@ -25,9 +25,11 @@ test("the Claude Code package is the self-contained shared Host package", async 
   );
   assert.equal(marketplace.plugins[0].source, "./plugins/project-graph");
 
-  const adapter = await readFile(new URL("bin/project-graph", pluginRoot), "utf8");
-  assert.doesNotMatch(
-    adapter,
-    /get_all_nodes|delete_all_nodes|tool definitions?|orchestrat|hooks?|MCP|REFERENCE_STORE|persistent state/i,
-  );
+  for (const adapterPath of ["bin/project-graph", "bin/project-graph.cmd"]) {
+    const adapter = await readFile(new URL(adapterPath, pluginRoot), "utf8");
+    assert.doesNotMatch(
+      adapter,
+      /get_all_nodes|delete_all_nodes|tool definitions?|orchestrat|hooks?|MCP|REFERENCE_STORE|persistent state/i,
+    );
+  }
 });

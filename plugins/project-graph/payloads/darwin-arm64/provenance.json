@@ -1,9 +1,9 @@
 {
-  "integrationRelease": "0.1.0",
+  "integrationRelease": "0.1.1",
   "target": "darwin-arm64",
   "projectGraph": {
-    "repository": "https://github.com/graphif/project-graph",
-    "revision": "5e924e48111e4f4cd3d38135053416befde70bf9"
+    "repository": "https://github.com/QinMian5/project-graph",
+    "revision": "7d54c924cdda6bec5095b1a8206096ea9843442a"
   },
   "node": {
     "version": "26.7.0",
@@ -20,7 +20,7 @@
     "sha256": "e1c47324bbe801ee8b5b5164129d80343fd75a5f7ea7d47c56ffb165c1f2495d"
   },
   "packageTransformations": [
-    "flatten pnpm production dependencies for Codex installation",
+    "flatten pnpm production dependencies for Host installation",
     "remove package-manager command shims"
   ],
   "materializer": "pnpm --filter @graphif/project-graph materialize:cli"
