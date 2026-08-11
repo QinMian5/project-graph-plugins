@@ -21,6 +21,16 @@ Plugin is then installed and managed entirely by the normal Codex lifecycle.
 The installed `project-graph` skill dynamically discovers tools and schemas before invoking the
 package-local CLI. Every project invocation requires an explicit `.prg` Project Path.
 
+Run the candidate tracer against the immutable installed Plugin root. It verifies dynamic
+discovery, a Closed Project read, a write to a disposable copy, and the complete Open Project
+desktop context matrix:
+
+```sh
+pnpm trace:codex \
+  --plugin-root "$HOME/.codex/plugins/cache/project-graph/project-graph/0.1.0" \
+  --project-graph ../project-graph
+```
+
 ## Release materialization
 
 `release.json` is the machine-readable authority for the Integration Release version, exact

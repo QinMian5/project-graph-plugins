@@ -11,6 +11,7 @@
     "sync-release": "node scripts/sync-release.mjs",
     "check:release": "node scripts/sync-release.mjs --check",
     "materialize:darwin-arm64": "node scripts/materialize-candidate.mjs",
+    "trace:codex": "node scripts/run-codex-tracer.mjs",
     "test": "node --test"
   }
 }
