@@ -1,0 +1,30 @@
+{
+  "name": "project-graph",
+  "owner": {
+    "name": "Graphif",
+    "url": "https://github.com/graphif"
+  },
+  "description": "Host-native Project Graph CLI integrations.",
+  "plugins": [
+    {
+      "name": "project-graph",
+      "displayName": "Project Graph",
+      "source": "./plugins/project-graph",
+      "description": "Use Project Graph built-in tools through a self-contained local CLI.",
+      "version": "0.1.0",
+      "author": {
+        "name": "Graphif",
+        "url": "https://github.com/graphif"
+      },
+      "homepage": "https://github.com/QinMian5/project-graph-plugins",
+      "repository": "https://github.com/QinMian5/project-graph-plugins",
+      "license": "GPL-3.0-only",
+      "keywords": [
+        "project-graph",
+        "knowledge-graph",
+        "cli"
+      ],
+      "category": "productivity"
+    }
+  ]
+}

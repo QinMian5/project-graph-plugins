@@ -38,7 +38,7 @@ function run(adapter, args = [], environment = {}) {
   });
 }
 
-test("the Codex adapter uses only its package-local darwin-arm64 payload", async (context) => {
+test("the shared Host adapter uses only its package-local darwin-arm64 payload", async (context) => {
   const fixture = await createPluginFixture();
   context.after(() => rm(fixture.root, { recursive: true, force: true }));
 
@@ -54,7 +54,7 @@ test("the Codex adapter uses only its package-local darwin-arm64 payload", async
   );
 });
 
-test("the Codex adapter fails closed for an unsupported target", async (context) => {
+test("the shared Host adapter fails closed for an unsupported target", async (context) => {
   const fixture = await createPluginFixture();
   context.after(() => rm(fixture.root, { recursive: true, force: true }));
 
@@ -72,7 +72,7 @@ test("the Codex adapter fails closed for an unsupported target", async (context)
   );
 });
 
-test("the Codex adapter fails closed when payload files are missing or not executable", async (context) => {
+test("the shared Host adapter fails closed when payload files are missing or not executable", async (context) => {
   const missing = await createPluginFixture();
   const notExecutable = await createPluginFixture();
   context.after(() => Promise.all([missing, notExecutable].map(({ root }) => rm(root, { recursive: true, force: true }))));
@@ -94,7 +94,7 @@ test("the Codex adapter fails closed when payload files are missing or not execu
   );
 });
 
-test("the Codex adapter fails closed when the bundled CLI version does not match", async (context) => {
+test("the shared Host adapter fails closed when the bundled CLI version does not match", async (context) => {
   const fixture = await createPluginFixture();
   context.after(() => rm(fixture.root, { recursive: true, force: true }));
   await writeFile(join(fixture.root, "release-version"), "0.1.1\n");

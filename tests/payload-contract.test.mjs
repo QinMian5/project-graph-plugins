@@ -32,7 +32,7 @@ async function assertNoSymlinks(directory) {
   }
 }
 
-test("the Codex package contains a self-contained darwin-arm64 production payload", async () => {
+test("the shared Host package contains a self-contained darwin-arm64 production payload", async () => {
   const release = await readJson(new URL("release.json", root));
   await Promise.all([nodePath, helperPath, adapterPath].map((path) => access(path, constants.X_OK)));
   await access(entryPath, constants.R_OK);

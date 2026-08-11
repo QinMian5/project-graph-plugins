@@ -1,0 +1,20 @@
+{
+  "$schema": "https://json.schemastore.org/claude-code-plugin-manifest.json",
+  "name": "project-graph",
+  "displayName": "Project Graph",
+  "version": "0.1.0",
+  "description": "Use Project Graph built-in tools through a self-contained local CLI.",
+  "author": {
+    "name": "Graphif",
+    "url": "https://github.com/graphif"
+  },
+  "homepage": "https://github.com/QinMian5/project-graph-plugins",
+  "repository": "https://github.com/QinMian5/project-graph-plugins",
+  "license": "GPL-3.0-only",
+  "keywords": [
+    "project-graph",
+    "knowledge-graph",
+    "cli"
+  ],
+  "skills": "./skills/"
+}

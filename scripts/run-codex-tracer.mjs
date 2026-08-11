@@ -52,11 +52,11 @@ const fixturePath = resolve(
   argument("--fixture", join(projectGraphRoot, "docs-pg/ProjectGraph开发进程图.prg")),
 );
 const adapterPath = join(pluginRoot, "bin/project-graph");
-const temporaryDirectory = await mkdtemp(join(tmpdir(), "project-graph-codex-tracer-"));
+const temporaryDirectory = await mkdtemp(join(tmpdir(), "project-graph-host-tracer-"));
 
 try {
   if (process.platform !== "darwin" || process.arch !== "arm64") {
-    throw new Error("the GRAPH-45 tracer requires macOS arm64");
+    throw new Error("the Project Graph Host tracer requires macOS arm64");
   }
   const referenceStorePath = join(temporaryDirectory, "references.json");
   const adapterEnvironment = {

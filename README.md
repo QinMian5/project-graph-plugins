@@ -35,6 +35,30 @@ pnpm trace:codex \
   --project-graph ../project-graph
 ```
 
+## Candidate installation for Claude Code
+
+Claude Code uses the same package root, release version, Shared Skill, adapter, and production
+payload. Add the candidate branch and install the Plugin with the default user scope:
+
+```sh
+claude plugin marketplace add QinMian5/project-graph-plugins@candidate/v0.1.0
+claude plugin install project-graph@project-graph
+```
+
+For local development, replace the first command with:
+
+```sh
+claude plugin marketplace add "$PWD"
+```
+
+Run the same acceptance sequence against the installed Claude Code Plugin root:
+
+```sh
+pnpm trace:claude \
+  --plugin-root /absolute/installedPath/from-claude-plugin-install \
+  --project-graph ../project-graph
+```
+
 ## Release materialization
 
 `release.json` is the machine-readable authority for the Integration Release version, exact

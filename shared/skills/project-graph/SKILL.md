@@ -26,6 +26,6 @@ For each task:
 The Agent owns tool choice, invocation order, and recovery from returned errors. This skill is a
 capability guide, not an orchestrator, and it carries no copied tool catalog or schema.
 
-Use the Codex approval mechanism when an invocation can change data or has another material effect.
+Use the active Host's approval mechanism when an invocation can change data or has another material effect.
 Make that judgment from the user's request and the discovered schema; the Plugin does not maintain a
 parallel risk taxonomy.
