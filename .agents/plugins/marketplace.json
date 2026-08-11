@@ -1,0 +1,20 @@
+{
+  "name": "project-graph",
+  "interface": {
+    "displayName": "Project Graph"
+  },
+  "plugins": [
+    {
+      "name": "project-graph",
+      "source": {
+        "source": "local",
+        "path": "./plugins/project-graph"
+      },
+      "policy": {
+        "installation": "AVAILABLE",
+        "authentication": "ON_INSTALL"
+      },
+      "category": "Productivity"
+    }
+  ]
+}

@@ -1,0 +1,30 @@
+{
+  "name": "project-graph",
+  "version": "0.1.0",
+  "description": "Use Project Graph built-in tools through a self-contained local CLI.",
+  "author": {
+    "name": "Graphif",
+    "url": "https://github.com/graphif"
+  },
+  "homepage": "https://github.com/graphif/project-graph-plugins",
+  "repository": "https://github.com/graphif/project-graph-plugins",
+  "license": "GPL-3.0-only",
+  "skills": "./skills/",
+  "interface": {
+    "displayName": "Project Graph",
+    "shortDescription": "Inspect and edit explicit Project Graph projects.",
+    "longDescription": "Discover Project Graph built-in tools dynamically, then invoke them through the bundled CLI against an explicit .prg Project Path.",
+    "developerName": "Graphif",
+    "category": "Productivity",
+    "capabilities": [
+      "Local CLI",
+      "Read",
+      "Write"
+    ],
+    "defaultPrompt": [
+      "List the available Project Graph tools.",
+      "Describe a Project Graph tool before invoking it.",
+      "Use an explicit .prg Project Path with Project Graph."
+    ]
+  }
+}
