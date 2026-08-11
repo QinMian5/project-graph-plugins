@@ -133,7 +133,7 @@ test("the shared Host adapter reports a missing Host Node runtime", async (conte
   assert.equal(result.stdout, "");
   assert.equal(
     result.stderr,
-    '{"code":"NODE_RUNTIME_MISSING","message":"Project Graph CLI requires Node.js 26 or newer on PATH."}\n',
+    '{"code":"NODE_RUNTIME_MISSING","message":"Project Graph CLI requires Node.js 22.13 or newer on PATH."}\n',
   );
 });
 

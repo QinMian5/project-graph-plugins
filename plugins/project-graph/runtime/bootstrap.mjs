@@ -44,9 +44,14 @@ function runNpm(args, options = {}) {
   return run("npm", args, options);
 }
 
-const majorVersion = Number(process.versions.node.split(".")[0]);
-if (!Number.isInteger(majorVersion) || majorVersion < 26) {
-  fail("NODE_VERSION_UNSUPPORTED", "Project Graph CLI requires Node.js 26 or newer.");
+const [majorVersion, minorVersion] = process.versions.node.split(".").map(Number);
+if (
+  !Number.isInteger(majorVersion) ||
+  !Number.isInteger(minorVersion) ||
+  majorVersion < 22 ||
+  (majorVersion === 22 && minorVersion < 13)
+) {
+  fail("NODE_VERSION_UNSUPPORTED", "Project Graph CLI requires Node.js 22.13 or newer.");
 }
 
 const target = targetName();

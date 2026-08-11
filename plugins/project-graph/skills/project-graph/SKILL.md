@@ -6,7 +6,7 @@ description: Use the Project Graph CLI to discover or invoke built-in tools agai
 # Use Project Graph
 
 Resolve `../../bin/project-graph` relative to this `SKILL.md` on macOS, or
-`../../bin/project-graph.cmd` on Windows, and run that adapter. The adapter uses Node.js 26 or newer
+`../../bin/project-graph.cmd` on Windows, and run that adapter. The adapter uses Node.js 22.13 or newer
 from `PATH` and installs pinned production dependencies into persistent Plugin data on first use.
 Do not install a global Project Graph CLI or pnpm. If the adapter reports a missing or unsupported
 Node.js runtime, surface that requirement to the user instead of changing their environment without

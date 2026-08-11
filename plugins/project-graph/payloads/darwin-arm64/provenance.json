@@ -1,18 +1,18 @@
 {
-  "integrationRelease": "0.1.5",
+  "integrationRelease": "0.1.6",
   "target": "darwin-arm64",
   "projectGraph": {
     "repository": "https://github.com/QinMian5/project-graph",
-    "revision": "c263140d5405c4dbca3c0541e6e3f7b68a8d2146"
+    "revision": "0f22378bde6b752824a5c2455d238a6bfbc9e581"
   },
   "hostRuntime": {
-    "node": ">=26.0.0",
+    "node": ">=22.13.0",
     "packageManager": "npm",
     "installMode": "persistent-plugin-data"
   },
   "ownershipHelper": {
     "sourcePath": "app/src-tauri/target/debug/project-graph-ownership-helper",
-    "sha256": "f5c0cca6aa24d29acf492978d3de8f63e50bbb016045f3e7317fd389d8c162c9"
+    "sha256": "105001bbce022a364ca85ad99854790eacc4d93c847fb98efa18fbab7591f313"
   },
   "dependencyInstall": "npm ci --omit=dev --include=optional --no-audit --no-fund",
   "materializer": "pnpm --filter @graphif/project-graph materialize:cli"

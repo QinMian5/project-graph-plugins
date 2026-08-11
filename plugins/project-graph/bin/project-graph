@@ -14,7 +14,7 @@ esac
 adapter_directory=${adapter_path%/*}
 plugin_root=$(CDPATH= cd -- "$adapter_directory/.." && pwd -P)
 
-node_path=$(command -v node) || fail '{"code":"NODE_RUNTIME_MISSING","message":"Project Graph CLI requires Node.js 26 or newer on PATH."}'
+node_path=$(command -v node) || fail '{"code":"NODE_RUNTIME_MISSING","message":"Project Graph CLI requires Node.js 22.13 or newer on PATH."}'
 bootstrap_path=$plugin_root/runtime/bootstrap.mjs
 
 if [ ! -r "$bootstrap_path" ]; then

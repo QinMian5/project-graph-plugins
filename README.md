@@ -2,13 +2,13 @@
 
 Host-native plugin packages for the [Project Graph](https://github.com/QinMian5/project-graph) CLI.
 
-Version `0.1.5` uses the standard host-runtime plugin model: the Plugin contains Project Graph CLI
+Version `0.1.6` uses the standard host-runtime plugin model: the Plugin contains Project Graph CLI
 templates, exact dependency lockfiles, and target-specific ownership helpers, but does not bundle
-Node.js or `node_modules`. The immutable `v0.1.0` through `v0.1.4` tags remain unchanged.
+Node.js or `node_modules`. The immutable `v0.1.0` through `v0.1.5` tags remain unchanged.
 
 ## Runtime requirements
 
-- Node.js 26 or newer and npm must be available on `PATH`.
+- Node.js 22.13 or newer and npm must be available on `PATH`.
 - The first CLI invocation requires registry access so `npm ci` can install the locked production
   dependencies.
 - Dependencies are installed under the Host's persistent Plugin data directory and reused on later
@@ -20,7 +20,7 @@ Node.js or `node_modules`. The immutable `v0.1.0` through `v0.1.4` tags remain u
 Install the unpublished candidate from the public Integration Repository at its immutable tag:
 
 ```sh
-codex plugin marketplace add QinMian5/project-graph-plugins --ref v0.1.5
+codex plugin marketplace add QinMian5/project-graph-plugins --ref v0.1.6
 codex plugin add project-graph@project-graph
 ```
 
@@ -50,7 +50,7 @@ Claude Code uses the same package root, release version, Shared Skill, adapter, 
 payload. Add the immutable candidate tag and install the Plugin with the default user scope:
 
 ```sh
-claude plugin marketplace add QinMian5/project-graph-plugins@v0.1.5
+claude plugin marketplace add QinMian5/project-graph-plugins@v0.1.6
 claude plugin install project-graph@project-graph
 ```
 

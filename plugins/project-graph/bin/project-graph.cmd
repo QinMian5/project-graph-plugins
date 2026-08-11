@@ -12,7 +12,7 @@ node "%BOOTSTRAP_PATH%" %*
 exit /b %errorlevel%
 
 :node_missing
->&2 echo {"code":"NODE_RUNTIME_MISSING","message":"Project Graph CLI requires Node.js 26 or newer on PATH."}
+>&2 echo {"code":"NODE_RUNTIME_MISSING","message":"Project Graph CLI requires Node.js 22.13 or newer on PATH."}
 exit /b 1
 
 :missing
