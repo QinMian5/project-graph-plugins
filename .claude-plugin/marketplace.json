@@ -11,7 +11,7 @@
       "displayName": "Project Graph",
       "source": "./plugins/project-graph",
       "description": "Use Project Graph built-in tools through a host-runtime local CLI.",
-      "version": "0.1.2",
+      "version": "0.1.3",
       "author": {
         "name": "Mian Qin",
         "url": "https://github.com/QinMian5"
