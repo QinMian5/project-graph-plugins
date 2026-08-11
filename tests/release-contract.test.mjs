@@ -22,6 +22,10 @@ test("one Integration Release metadata source drives the Codex package identity"
     },
     targets: {
       "darwin-arm64": {
+        ownershipHelper: {
+          sourcePath: "app/src-tauri/target/debug/project-graph-ownership-helper",
+          sha256: "e1c47324bbe801ee8b5b5164129d80343fd75a5f7ea7d47c56ffb165c1f2495d",
+        },
         node: {
           version: "26.7.0",
           archive: "node-v26.7.0-darwin-arm64.tar.gz",

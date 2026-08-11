@@ -14,13 +14,8 @@ esac
 adapter_directory=${adapter_path%/*}
 plugin_root=$(CDPATH= cd -- "$adapter_directory/.." && pwd -P)
 
-if [ "${PROJECT_GRAPH_ADAPTER_TESTING-}" = "1" ]; then
-  system_name=${PROJECT_GRAPH_ADAPTER_TEST_SYSTEM-}
-  machine_architecture=${PROJECT_GRAPH_ADAPTER_TEST_ARCH-}
-else
-  system_name=$(/usr/bin/uname -s)
-  machine_architecture=$(/usr/bin/uname -m)
-fi
+system_name=$(/usr/bin/uname -s)
+machine_architecture=$(/usr/bin/uname -m)
 
 case "$system_name:$machine_architecture" in
   Darwin:arm64) target=darwin-arm64 ;;

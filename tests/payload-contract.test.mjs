@@ -1,6 +1,7 @@
 import assert from "node:assert/strict";
 import { access, constants, lstat, readFile, readdir, stat } from "node:fs/promises";
 import { spawnSync } from "node:child_process";
+import { createHash } from "node:crypto";
 import { fileURLToPath } from "node:url";
 import { resolve } from "node:path";
 import test from "node:test";
@@ -88,9 +89,17 @@ test("the Codex package contains a self-contained darwin-arm64 production payloa
         "codesign --force --sign -",
       ],
     },
-    packageTransformations: ["flatten pnpm production dependencies for Codex installation"],
+    ownershipHelper: release.targets["darwin-arm64"].ownershipHelper,
+    packageTransformations: [
+      "flatten pnpm production dependencies for Codex installation",
+      "remove package-manager command shims",
+    ],
     materializer: "pnpm --filter @graphif/project-graph materialize:cli",
   });
+  assert.equal(
+    createHash("sha256").update(await readFile(helperPath)).digest("hex"),
+    release.targets["darwin-arm64"].ownershipHelper.sha256,
+  );
   assert.match(await readFile(new URL("licenses/project-graph-GPL-3.0.txt", payloadRoot), "utf8"), /GNU GENERAL PUBLIC LICENSE/);
   assert.match(await readFile(new URL("licenses/node-LICENSE", payloadRoot), "utf8"), /Node\.js/);
   const ignoreResult = spawnSync(

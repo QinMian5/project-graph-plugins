@@ -9,6 +9,7 @@ import {
   mkdir,
   mkdtemp,
   readFile,
+  readdir,
   rename,
   rm,
   writeFile,
@@ -26,6 +27,12 @@ const projectGraphRoot = resolve(
 const release = JSON.parse(await readFile(join(repositoryRoot, "release.json"), "utf8"));
 const target = "darwin-arm64";
 const targetMetadata = release.targets[target];
+const helperIndex = arguments_.indexOf("--ownership-helper");
+const helperPath = resolve(
+  helperIndex === -1
+    ? join(projectGraphRoot, targetMetadata.ownershipHelper.sourcePath)
+    : arguments_[helperIndex + 1],
+);
 const pluginRoot = join(repositoryRoot, "plugins/project-graph");
 const payloadParent = join(pluginRoot, "payloads");
 const payloadRoot = join(payloadParent, target);
@@ -46,17 +53,20 @@ function run(command, args, options = {}) {
   );
 }
 
+async function removePackageManagerCommandShims(directory) {
+  for (const entry of await readdir(directory, { withFileTypes: true })) {
+    if (!entry.isDirectory()) continue;
+    const path = join(directory, entry.name);
+    if (entry.name === ".bin") await rm(path, { recursive: true, force: true });
+    else await removePackageManagerCommandShims(path);
+  }
+}
+
 try {
   if (process.platform !== "darwin" || process.arch !== "arm64") {
     throw new Error("darwin-arm64 payloads must be materialized on darwin-arm64");
   }
   if (!targetMetadata) throw new Error(`release metadata does not define ${target}`);
-  await access(payloadRoot).then(
-    () => {
-      throw new Error(`${payloadRoot} already exists`);
-    },
-    () => undefined,
-  );
 
   const projectGraphRevision = run("git", ["-C", projectGraphRoot, "rev-parse", "HEAD"]).trim();
   if (projectGraphRevision !== release.projectGraph.revision) {
@@ -66,8 +76,11 @@ try {
     throw new Error("Project Graph source worktree must be clean");
   }
 
-  const helperPath = join(projectGraphRoot, "app/src-tauri/target/debug/project-graph-ownership-helper");
   await access(helperPath, constants.R_OK | constants.X_OK);
+  const helperHash = createHash("sha256").update(await readFile(helperPath)).digest("hex");
+  if (helperHash !== targetMetadata.ownershipHelper.sha256) {
+    throw new Error("Project Graph ownership helper checksum does not match release metadata");
+  }
   run(process.execPath, [join(repositoryRoot, "scripts/sync-release.mjs"), "--check"]);
 
   await mkdir(payloadParent, { recursive: true });
@@ -140,6 +153,7 @@ try {
   }
   await rm(deployedNodeModulesPath, { recursive: true, force: true });
   await rename(flattenedNodeModulesPath, deployedNodeModulesPath);
+  await removePackageManagerCommandShims(deployedNodeModulesPath);
 
   const provenance = {
     integrationRelease: release.version,
@@ -153,13 +167,31 @@ try {
         "codesign --force --sign -",
       ],
     },
-    packageTransformations: ["flatten pnpm production dependencies for Codex installation"],
+    ownershipHelper: targetMetadata.ownershipHelper,
+    packageTransformations: [
+      "flatten pnpm production dependencies for Codex installation",
+      "remove package-manager command shims",
+    ],
     materializer: "pnpm --filter @graphif/project-graph materialize:cli",
   };
   await writeFile(join(stagingRoot, "VERSION"), `${release.version}\n`);
   await writeFile(join(stagingRoot, "provenance.json"), `${JSON.stringify(provenance, null, 2)}\n`);
-  await rename(stagingRoot, payloadRoot);
+  const previousPayloadRoot = join(payloadParent, `.${target}-previous-${String(process.pid)}`);
+  let previousPayloadMoved = false;
+  try {
+    await rename(payloadRoot, previousPayloadRoot);
+    previousPayloadMoved = true;
+  } catch (error) {
+    if (!(error instanceof Error) || !("code" in error) || error.code !== "ENOENT") throw error;
+  }
+  try {
+    await rename(stagingRoot, payloadRoot);
+  } catch (error) {
+    if (previousPayloadMoved) await rename(previousPayloadRoot, payloadRoot);
+    throw error;
+  }
   stagingRoot = undefined;
+  if (previousPayloadMoved) await rm(previousPayloadRoot, { recursive: true, force: true });
   process.stdout.write(`${JSON.stringify({ target, version: release.version, payloadRoot })}\n`);
 } catch (error) {
   process.stderr.write(`${error instanceof Error ? error.message : String(error)}\n`);

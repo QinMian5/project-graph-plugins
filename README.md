@@ -6,17 +6,21 @@ No Integration Release has been promoted to `main` yet. Version `0.1.0` is devel
 `candidate/v0.1.0`; ordinary unpinned Marketplace users must not follow it until the macOS and
 Windows acceptance sequence is complete.
 
-## Candidate installation for Codex
+## Local candidate installation for Codex
 
-From the repository-hosted candidate ref:
+Until the `graphif` organization grants repository-creation permission, install the candidate from
+this checkout through the normal local Marketplace lifecycle:
 
 ```sh
-codex plugin marketplace add graphif/project-graph-plugins --ref candidate/v0.1.0
+codex plugin marketplace add "$PWD"
 codex plugin add project-graph@project-graph
 ```
 
-For local candidate development, replace the repository identity with this checkout path. The
-Plugin is then installed and managed entirely by the normal Codex lifecycle.
+After the public repository exists, the equivalent candidate-ref command will be:
+
+```sh
+codex plugin marketplace add graphif/project-graph-plugins --ref candidate/v0.1.0
+```
 
 The installed `project-graph` skill dynamically discovers tools and schemas before invoking the
 package-local CLI. Every project invocation requires an explicit `.prg` Project Path.
@@ -27,19 +31,21 @@ desktop context matrix:
 
 ```sh
 pnpm trace:codex \
-  --plugin-root "$HOME/.codex/plugins/cache/project-graph/project-graph/0.1.0" \
+  --plugin-root /absolute/installedPath/from-codex-plugin-add \
   --project-graph ../project-graph
 ```
 
 ## Release materialization
 
 `release.json` is the machine-readable authority for the Integration Release version, exact
-Project Graph revision, targets, and bundled Node patch version. From a sibling checkout of the
-exact Project Graph revision:
+Project Graph revision, targets, ownership-helper checksum, and bundled Node patch version. The
+GRAPH-44 prerequisite must have produced the helper at the metadata-recorded source path (or pass
+an equivalent verified artifact with `--ownership-helper`). From a sibling checkout of the exact
+Project Graph revision:
 
 ```sh
 pnpm sync-release
-pnpm materialize:darwin-arm64
+pnpm materialize:darwin-arm64 --project-graph ../project-graph
 pnpm check:release
 pnpm test
 ```

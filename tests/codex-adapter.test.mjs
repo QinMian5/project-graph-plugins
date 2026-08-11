@@ -1,5 +1,5 @@
 import assert from "node:assert/strict";
-import { chmod, copyFile, mkdir, mkdtemp, rm, writeFile } from "node:fs/promises";
+import { chmod, copyFile, mkdir, mkdtemp, readFile, rm, writeFile } from "node:fs/promises";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
 import { spawnSync } from "node:child_process";
@@ -58,11 +58,12 @@ test("the Codex adapter fails closed for an unsupported target", async (context)
   const fixture = await createPluginFixture();
   context.after(() => rm(fixture.root, { recursive: true, force: true }));
 
-  const result = run(fixture.adapter, [], {
-    PROJECT_GRAPH_ADAPTER_TESTING: "1",
-    PROJECT_GRAPH_ADAPTER_TEST_SYSTEM: "Linux",
-    PROJECT_GRAPH_ADAPTER_TEST_ARCH: "x86_64",
-  });
+  const productionAdapter = await readFile(adapterSource, "utf8");
+  assert.doesNotMatch(productionAdapter, /PROJECT_GRAPH_ADAPTER_TEST/);
+  const unsupportedAdapter = productionAdapter.replace("Darwin:arm64) target=darwin-arm64", "Unsupported:target) target=darwin-arm64");
+  assert.notEqual(unsupportedAdapter, productionAdapter);
+  await writeFile(fixture.adapter, unsupportedAdapter);
+  const result = run(fixture.adapter);
   assert.equal(result.status, 1);
   assert.equal(result.stdout, "");
   assert.equal(

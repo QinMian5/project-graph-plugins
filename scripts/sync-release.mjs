@@ -23,7 +23,7 @@ try {
     projectedVersion !== `${release.version}\n` ||
     codexSkill !== sharedSkill;
 
-  if (check && stale) throw new Error("release projections are stale; run npm run sync-release");
+  if (check && stale) throw new Error("release projections are stale; run pnpm sync-release");
   if (!stale) process.exit(0);
 
   manifest.version = release.version;
