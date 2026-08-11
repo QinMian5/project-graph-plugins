@@ -4,6 +4,7 @@ import {
   access,
   chmod,
   constants,
+  cp,
   copyFile,
   mkdir,
   mkdtemp,
@@ -29,6 +30,7 @@ const pluginRoot = join(repositoryRoot, "plugins/project-graph");
 const payloadParent = join(pluginRoot, "payloads");
 const payloadRoot = join(payloadParent, target);
 const downloadDirectory = await mkdtemp(join(tmpdir(), "project-graph-node-runtime-"));
+const runtimeSymbolPrefixes = ["_napi_", "_node_api_", "_node_module_", "_uv_"];
 let stagingRoot;
 
 function run(command, args, options = {}) {
@@ -36,6 +38,7 @@ function run(command, args, options = {}) {
     cwd: options.cwd ?? repositoryRoot,
     encoding: "utf8",
     env: options.env ?? process.env,
+    maxBuffer: 64 * 1024 * 1024,
   });
   if (result.status === 0) return result.stdout;
   throw new Error(
@@ -91,7 +94,14 @@ try {
   const bundledNodePath = join(stagingRoot, "bin/node");
   await copyFile(join(extractedNodeRoot, "bin/node"), bundledNodePath);
   await chmod(bundledNodePath, 0o755);
-  run("/usr/bin/strip", ["-u", "-r", bundledNodePath]);
+  const runtimeSymbols = run("/usr/bin/nm", ["-gj", bundledNodePath])
+    .split("\n")
+    .filter((symbol) => runtimeSymbolPrefixes.some((prefix) => symbol.startsWith(prefix)))
+    .sort();
+  if (runtimeSymbols.length === 0) throw new Error("Node runtime symbol allowlist is empty");
+  const runtimeSymbolsPath = join(downloadDirectory, "runtime-symbols.txt");
+  await writeFile(runtimeSymbolsPath, `${runtimeSymbols.join("\n")}\n`);
+  run("/usr/bin/strip", ["-u", "-r", "-s", runtimeSymbolsPath, bundledNodePath]);
   run("/usr/bin/codesign", ["--force", "--sign", "-", bundledNodePath]);
   await copyFile(join(extractedNodeRoot, "LICENSE"), join(stagingRoot, "licenses/node-LICENSE"));
   await copyFile(
@@ -112,6 +122,25 @@ try {
     },
   );
 
+  const deployedNodeModulesPath = join(stagingRoot, "cli/node_modules");
+  const flattenedNodeModulesPath = join(stagingRoot, "cli/node_modules.flattened");
+  await cp(join(deployedNodeModulesPath, ".pnpm/node_modules"), flattenedNodeModulesPath, {
+    recursive: true,
+    dereference: true,
+    preserveTimestamps: true,
+  });
+  const runtimePackage = JSON.parse(await readFile(join(stagingRoot, "cli/package.json"), "utf8"));
+  for (const dependency of Object.keys(runtimePackage.dependencies ?? {})) {
+    await cp(join(deployedNodeModulesPath, dependency), join(flattenedNodeModulesPath, dependency), {
+      recursive: true,
+      dereference: true,
+      preserveTimestamps: true,
+      force: true,
+    });
+  }
+  await rm(deployedNodeModulesPath, { recursive: true, force: true });
+  await rename(flattenedNodeModulesPath, deployedNodeModulesPath);
+
   const provenance = {
     integrationRelease: release.version,
     target,
@@ -119,8 +148,12 @@ try {
     node: {
       ...targetMetadata.node,
       source: nodeUrl,
-      transformations: ["strip -u -r", "codesign --force --sign -"],
+      transformations: [
+        "strip -u -r preserving napi_, node_api_, node_module_, and uv_ symbols",
+        "codesign --force --sign -",
+      ],
     },
+    packageTransformations: ["flatten pnpm production dependencies for Codex installation"],
     materializer: "pnpm --filter @graphif/project-graph materialize:cli",
   };
   await writeFile(join(stagingRoot, "VERSION"), `${release.version}\n`);

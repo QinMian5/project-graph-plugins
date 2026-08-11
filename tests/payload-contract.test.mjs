@@ -1,8 +1,8 @@
 import assert from "node:assert/strict";
-import { access, constants, lstat, readFile, readdir, readlink, stat } from "node:fs/promises";
+import { access, constants, lstat, readFile, readdir, stat } from "node:fs/promises";
 import { spawnSync } from "node:child_process";
 import { fileURLToPath } from "node:url";
-import { dirname, resolve } from "node:path";
+import { resolve } from "node:path";
 import test from "node:test";
 
 const root = new URL("../", import.meta.url);
@@ -14,23 +14,20 @@ const helperPath = new URL("cli/project-graph-ownership-helper", payloadRoot);
 const adapterPath = new URL("bin/project-graph", pluginRoot);
 const readJson = async (url) => JSON.parse(await readFile(url, "utf8"));
 
-function run(command, args) {
+function run(command, args, options = {}) {
   return spawnSync(fileURLToPath(command), args, {
+    cwd: options.cwd,
     encoding: "utf8",
     env: { PATH: "/definitely-not-a-runtime-path", HOME: process.env.HOME },
   });
 }
 
-async function assertSymlinksStayInside(directory, rootDirectory = resolve(directory)) {
+async function assertNoSymlinks(directory) {
   for (const entry of await readdir(directory, { withFileTypes: true })) {
     const path = resolve(directory, entry.name);
     const metadata = await lstat(path);
-    if (metadata.isSymbolicLink()) {
-      const target = resolve(dirname(path), await readlink(path));
-      assert.ok(target.startsWith(`${rootDirectory}/`), `${path} points outside the payload`);
-    } else if (metadata.isDirectory()) {
-      await assertSymlinksStayInside(path, rootDirectory);
-    }
+    assert.equal(metadata.isSymbolicLink(), false, `${path} is a symlink that Codex installation would omit`);
+    if (metadata.isDirectory()) await assertNoSymlinks(path);
   }
 }
 
@@ -70,6 +67,13 @@ test("the Codex package contains a self-contained darwin-arm64 production payloa
   assert.ok(runtimePackage.dependencies.sharp);
   assert.equal(runtimePackage.dependencies.tsx, undefined);
   assert.equal(runtimePackage.dependencies.vite, undefined);
+  const productionDependencies = run(nodePath, ["--eval", "require('jsdom'); require('sharp')"], {
+    cwd: fileURLToPath(new URL("cli/", payloadRoot)),
+  });
+  assert.deepEqual(
+    { status: productionDependencies.status, stderr: productionDependencies.stderr },
+    { status: 0, stderr: "" },
+  );
 
   const provenance = await readJson(new URL("provenance.json", payloadRoot));
   assert.deepEqual(provenance, {
@@ -79,11 +83,21 @@ test("the Codex package contains a self-contained darwin-arm64 production payloa
     node: {
       ...release.targets["darwin-arm64"].node,
       source: `https://nodejs.org/dist/v${release.targets["darwin-arm64"].node.version}/${release.targets["darwin-arm64"].node.archive}`,
-      transformations: ["strip -u -r", "codesign --force --sign -"],
+      transformations: [
+        "strip -u -r preserving napi_, node_api_, node_module_, and uv_ symbols",
+        "codesign --force --sign -",
+      ],
     },
+    packageTransformations: ["flatten pnpm production dependencies for Codex installation"],
     materializer: "pnpm --filter @graphif/project-graph materialize:cli",
   });
   assert.match(await readFile(new URL("licenses/project-graph-GPL-3.0.txt", payloadRoot), "utf8"), /GNU GENERAL PUBLIC LICENSE/);
   assert.match(await readFile(new URL("licenses/node-LICENSE", payloadRoot), "utf8"), /Node\.js/);
-  await assertSymlinksStayInside(fileURLToPath(payloadRoot));
+  const ignoreResult = spawnSync(
+    "git",
+    ["check-ignore", "-q", "plugins/project-graph/payloads/darwin-arm64/cli/node_modules/.modules.yaml"],
+    { cwd: fileURLToPath(root) },
+  );
+  assert.equal(ignoreResult.status, 1, "production dependencies are excluded from the candidate ref");
+  await assertNoSymlinks(fileURLToPath(payloadRoot));
 });

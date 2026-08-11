@@ -1,5 +1,5 @@
 import { t as v4_default } from "./chunks/v4-DD_PkrNo.mjs";
-import { c as prepareBuiltInToolInvocation, n as builtInToolCatalog, o as getBuiltInToolDefinition } from "./chunks/BuiltInToolRegistry-Dl_dIFF8.mjs";
+import { c as prepareBuiltInToolInvocation, n as builtInToolCatalog, o as getBuiltInToolDefinition } from "./chunks/BuiltInToolRegistry-DDqJSJVu.mjs";
 import { n as canOpenProjectProvideCapabilities, t as canClosedProjectProvideCapabilities } from "./chunks/BuiltInToolRuntimeProfiles-BScINZH6.mjs";
 import { dirname, join } from "node:path";
 import { fileURLToPath } from "node:url";
@@ -140,7 +140,7 @@ async function runProjectGraphCliProcess(options) {
 process.env.PROJECT_GRAPH_OWNERSHIP_HELPER_PATH = join(dirname(fileURLToPath(import.meta.url)), process.platform === "win32" ? "project-graph-ownership-helper.exe" : "project-graph-ownership-helper");
 await runProjectGraphCliProcess({
 	version: "0.1.0",
-	loadRuntime: () => import("./chunks/ProjectGraphCliProductionRuntime-D205HzPI.mjs")
+	loadRuntime: () => import("./chunks/ProjectGraphCliProductionRuntime-DgUY0U6s.mjs")
 });
 //#endregion
 export {};
