@@ -56,7 +56,7 @@ const temporaryDirectory = await mkdtemp(join(tmpdir(), "project-graph-host-trac
 
 try {
   if (process.platform !== "darwin" || process.arch !== "arm64") {
-    throw new Error("the Project Graph Host tracer requires macOS arm64");
+    throw new Error("the shared Project Graph Host tracer requires macOS arm64");
   }
   const referenceStorePath = join(temporaryDirectory, "references.json");
   const adapterEnvironment = {

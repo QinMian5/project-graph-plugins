@@ -74,7 +74,7 @@ pnpm check:release
 pnpm test
 ```
 
-The resulting Codex package is under `plugins/project-graph`. Runtime invocations use its bundled
+The resulting shared Host package is under `plugins/project-graph`. Runtime invocations use its bundled
 Node, production CLI runtime, native ownership helper, and licenses; they do not use user Node,
 pnpm, `PATH`, a desktop copy, or a downloader.
 
