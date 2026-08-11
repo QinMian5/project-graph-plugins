@@ -72,12 +72,15 @@ try {
   assert.equal(description.name, tools[0].name);
 
   const sourceHashBefore = await hash(fixturePath);
+  const closedReadPath = join(temporaryDirectory, "closed-read.prg");
+  await copyFile(fixturePath, closedReadPath);
+  const closedReadHashBefore = await hash(closedReadPath);
   const closedRead = parseJson(
-    invoke("tool", "invoke", "get_all_nodes", "--project", fixturePath, "--input", "{}", "--allow-upgrade"),
+    invoke("tool", "invoke", "get_all_nodes", "--project", closedReadPath, "--input", "{}", "--allow-upgrade"),
     "Closed Project read",
   );
-  const sourceHashAfterRead = await hash(fixturePath);
-  assert.equal(sourceHashAfterRead, sourceHashBefore, "Closed Project read changed the source fixture");
+  assert.equal(await hash(closedReadPath), closedReadHashBefore, "Closed Project read changed its fixture copy");
+  assert.equal(await hash(fixturePath), sourceHashBefore, "Closed Project read changed the source fixture");
 
   const disposablePath = join(temporaryDirectory, "disposable.prg");
   await copyFile(fixturePath, disposablePath);
