@@ -1,9 +1,9 @@
 {
-  "integrationRelease": "0.1.4",
+  "integrationRelease": "0.1.5",
   "target": "win32-x64",
   "projectGraph": {
     "repository": "https://github.com/QinMian5/project-graph",
-    "revision": "555cb5a1f19b98b5e1af727e497de26f64eed431"
+    "revision": "c263140d5405c4dbca3c0541e6e3f7b68a8d2146"
   },
   "hostRuntime": {
     "node": ">=26.0.0",
@@ -12,7 +12,7 @@
   },
   "ownershipHelper": {
     "sourcePath": "app/src-tauri/target/release/project-graph-ownership-helper.exe",
-    "sha256": "04e7417e7e5d26316aa104541c1c72ba4323b9ea6c4c6273426d896c133f25ec"
+    "sha256": "d86945ebbd5614151fcf1b4fb36e1b6783a98756773778bd85f9c4633a21ab53"
   },
   "dependencyInstall": "npm ci --omit=dev --include=optional --no-audit --no-fund",
   "materializer": "pnpm --filter @graphif/project-graph materialize:cli"

@@ -2,7 +2,7 @@
   "$schema": "https://json.schemastore.org/claude-code-plugin-manifest.json",
   "name": "project-graph",
   "displayName": "Project Graph",
-  "version": "0.1.4",
+  "version": "0.1.5",
   "description": "Use Project Graph built-in tools through a host-runtime local CLI.",
   "author": {
     "name": "Mian Qin",

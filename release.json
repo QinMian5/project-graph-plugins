@@ -1,9 +1,9 @@
 {
   "schemaVersion": 1,
-  "version": "0.1.4",
+  "version": "0.1.5",
   "projectGraph": {
     "repository": "https://github.com/QinMian5/project-graph",
-    "revision": "555cb5a1f19b98b5e1af727e497de26f64eed431"
+    "revision": "c263140d5405c4dbca3c0541e6e3f7b68a8d2146"
   },
   "hostRuntime": {
     "node": ">=26.0.0",
@@ -14,13 +14,13 @@
     "darwin-arm64": {
       "ownershipHelper": {
         "sourcePath": "app/src-tauri/target/debug/project-graph-ownership-helper",
-        "sha256": "2a0cddb4a702a1358053e85cd27beb64f8898392af3bd5f7b01238e3d1574012"
+        "sha256": "f5c0cca6aa24d29acf492978d3de8f63e50bbb016045f3e7317fd389d8c162c9"
       }
     },
     "win32-x64": {
       "ownershipHelper": {
         "sourcePath": "app/src-tauri/target/release/project-graph-ownership-helper.exe",
-        "sha256": "04e7417e7e5d26316aa104541c1c72ba4323b9ea6c4c6273426d896c133f25ec"
+        "sha256": "d86945ebbd5614151fcf1b4fb36e1b6783a98756773778bd85f9c4633a21ab53"
       }
     }
   }
