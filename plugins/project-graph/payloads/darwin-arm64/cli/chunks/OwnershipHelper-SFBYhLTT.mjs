@@ -150,11 +150,14 @@ function normalizeWindowsVerbatimPath(path) {
 async function acquireProjectOwnership(canonicalPath, abortSignal) {
 	let child;
 	try {
-		child = spawn(ownershipHelperPath(), ["try-hold-project", canonicalPath], { stdio: [
-			"pipe",
-			"pipe",
-			"pipe"
-		] });
+		child = spawn(ownershipHelperPath(), ["try-hold-project", canonicalPath], {
+			stdio: [
+				"pipe",
+				"pipe",
+				"pipe"
+			],
+			windowsHide: true
+		});
 		child.stderr.resume();
 	} catch {
 		throw helperUnavailable();
@@ -186,11 +189,14 @@ async function acquireProjectOwnership(canonicalPath, abortSignal) {
 async function acquireReferenceStoreLock(storePath, abortSignal) {
 	let child;
 	try {
-		child = spawn(ownershipHelperPath(), ["hold-reference-store", storePath], { stdio: [
-			"pipe",
-			"pipe",
-			"pipe"
-		] });
+		child = spawn(ownershipHelperPath(), ["hold-reference-store", storePath], {
+			stdio: [
+				"pipe",
+				"pipe",
+				"pipe"
+			],
+			windowsHide: true
+		});
 		child.stderr.resume();
 	} catch {
 		throw helperUnavailable();

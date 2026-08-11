@@ -17,10 +17,10 @@ test("one Integration Release metadata source drives both Host package identitie
 
   assert.deepEqual(release, {
     schemaVersion: 1,
-    version: "0.1.7",
+    version: "0.1.8",
     projectGraph: {
       repository: "https://github.com/QinMian5/project-graph",
-      revision: "b4dac5aed33f383597fff55efc56605bac2d03d5",
+      revision: "7a1cebb09ea9c9736f79e3b236e1c1a6c2eaba8f",
     },
     hostRuntime: {
       node: ">=22.13.0",

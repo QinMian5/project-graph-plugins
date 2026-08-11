@@ -5,7 +5,7 @@ import { f as Decoder, n as ProjectState, o as classifyBuiltInToolRuntimeError, 
 import { n as finalizeRuntimeCleanup, r as runtimeCleanupFailure, t as RuntimeCleanupError } from "./RuntimeCleanup-CKF35Wew.mjs";
 import { d as FileSystemProviderFile, f as writeClosedProjectFileAtomically, t as StageManager, u as AIObjectReferenceRegistry } from "./StageManager-DvOjGzaj.mjs";
 import "./LineEdge-B0zaYZyL.mjs";
-import { r as acquireReferenceStoreLock, t as OwnershipHelperError } from "./OwnershipHelper-CjK63QdJ.mjs";
+import { r as acquireReferenceStoreLock, t as OwnershipHelperError } from "./OwnershipHelper-SFBYhLTT.mjs";
 import { join } from "node:path";
 import { readFile, writeFile } from "node:fs/promises";
 import { homedir } from "node:os";

@@ -1,7 +1,7 @@
 import { c as prepareBuiltInToolInvocation } from "./BuiltInToolRegistry-Bc-GWZgp.mjs";
 import { n as canOpenProjectProvideCapabilities, t as canClosedProjectProvideCapabilities } from "./BuiltInToolRuntimeProfiles-BScINZH6.mjs";
 import { n as finalizeRuntimeCleanup } from "./RuntimeCleanup-CKF35Wew.mjs";
-import { n as acquireProjectOwnership, t as OwnershipHelperError } from "./OwnershipHelper-CjK63QdJ.mjs";
+import { n as acquireProjectOwnership, t as OwnershipHelperError } from "./OwnershipHelper-SFBYhLTT.mjs";
 import { realpathSync, statSync } from "node:fs";
 import { randomUUID } from "node:crypto";
 import { spawn } from "node:child_process";
@@ -138,7 +138,8 @@ async function runOwnedWorker(args, canonicalPath, abortSignal) {
 				"ignore",
 				"pipe",
 				"pipe"
-			]
+			],
+			windowsHide: true
 		});
 		const stdoutStream = worker.stdout;
 		const stderrStream = worker.stderr;
@@ -402,7 +403,7 @@ function createProjectGraphCliRuntime(invokeClosedProjectTool) {
 //#region src/cli/ProjectGraphCliProductionRuntime.ts
 function invokeClosedProjectToolInProduction(options) {
 	return runClosedProjectRuntime(async () => {
-		const { invokeClosedProjectTool, loadPrecompiledClosedProjectModule } = await import("./ClosedProjectInvocation-BGe8My3M.mjs");
+		const { invokeClosedProjectTool, loadPrecompiledClosedProjectModule } = await import("./ClosedProjectInvocation-BsbJW8zR.mjs");
 		return invokeClosedProjectTool(options, loadPrecompiledClosedProjectModule);
 	});
 }

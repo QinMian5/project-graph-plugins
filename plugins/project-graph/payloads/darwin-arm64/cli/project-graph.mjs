@@ -139,8 +139,8 @@ async function runProjectGraphCliProcess(options) {
 //#region src/cli/project-graph-production.ts
 process.env.PROJECT_GRAPH_OWNERSHIP_HELPER_PATH = join(dirname(fileURLToPath(import.meta.url)), process.platform === "win32" ? "project-graph-ownership-helper.exe" : "project-graph-ownership-helper");
 await runProjectGraphCliProcess({
-	version: "0.1.7",
-	loadRuntime: () => import("./chunks/ProjectGraphCliProductionRuntime-CuBcZBE-.mjs")
+	version: "0.1.8",
+	loadRuntime: () => import("./chunks/ProjectGraphCliProductionRuntime-Y8kCpAsF.mjs")
 });
 //#endregion
 export {};

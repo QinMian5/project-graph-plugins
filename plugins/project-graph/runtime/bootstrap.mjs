@@ -34,6 +34,7 @@ function run(command, args, options = {}) {
     env: options.env ?? process.env,
     encoding: "utf8",
     stdio: options.stdio ?? "pipe",
+    windowsHide: true,
   });
 }
 
