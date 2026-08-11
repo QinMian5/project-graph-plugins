@@ -1,6 +1,6 @@
 import { spawnSync } from "node:child_process";
 import { createHash } from "node:crypto";
-import { cp, mkdir, readFile, rename, rm, writeFile } from "node:fs/promises";
+import { cp, mkdir, readFile, rename, rm, stat, writeFile } from "node:fs/promises";
 import { homedir } from "node:os";
 import { dirname, join } from "node:path";
 import { fileURLToPath } from "node:url";
@@ -59,22 +59,39 @@ const dataRoot =
   process.env.PLUGIN_DATA ??
   process.env.CLAUDE_PLUGIN_DATA ??
   defaultDataRoot();
-const runtimeRoot = join(dataRoot, "runtime", version, target);
-const markerPath = join(runtimeRoot, ".ready.json");
+const canonicalRuntimeRoot = join(dataRoot, "runtime", version, target);
+const repairRuntimeRoot = `${canonicalRuntimeRoot}.repair-${packageLockHash.slice(0, 16)}`;
 const expectedMarker = { version, target, packageLockSha256: packageLockHash };
-let ready = false;
 
-try {
-  const marker = JSON.parse(await readFile(markerPath, "utf8"));
-  ready =
-    marker.version === expectedMarker.version &&
-    marker.target === expectedMarker.target &&
-    marker.packageLockSha256 === expectedMarker.packageLockSha256;
-} catch {
-  ready = false;
+async function runtimeIsReady(root) {
+  try {
+    const marker = JSON.parse(await readFile(join(root, ".ready.json"), "utf8"));
+    return (
+      marker.version === expectedMarker.version &&
+      marker.target === expectedMarker.target &&
+      marker.packageLockSha256 === expectedMarker.packageLockSha256
+    );
+  } catch {
+    return false;
+  }
 }
 
-if (!ready) {
+async function pathExists(path) {
+  try {
+    await stat(path);
+    return true;
+  } catch (error) {
+    if (error instanceof Error && "code" in error && error.code === "ENOENT") return false;
+    throw error;
+  }
+}
+
+let runtimeRoot = canonicalRuntimeRoot;
+if ((await pathExists(canonicalRuntimeRoot)) && !(await runtimeIsReady(canonicalRuntimeRoot))) {
+  runtimeRoot = repairRuntimeRoot;
+}
+
+if (!(await runtimeIsReady(runtimeRoot))) {
   const npmVersion = runNpm(["--version"]);
   if (npmVersion.status !== 0) {
     fail("NPM_UNAVAILABLE", "Project Graph CLI requires npm to install its production dependencies.");
@@ -93,8 +110,15 @@ if (!ready) {
     fail("DEPENDENCY_INSTALL_FAILED", "Project Graph CLI production dependencies could not be installed.");
   }
   await writeFile(join(stagingRoot, ".ready.json"), `${JSON.stringify(expectedMarker)}\n`);
-  await rm(runtimeRoot, { recursive: true, force: true });
-  await rename(stagingRoot, runtimeRoot);
+  try {
+    await rename(stagingRoot, runtimeRoot);
+  } catch {
+    if (!(await runtimeIsReady(runtimeRoot))) {
+      await rm(stagingRoot, { recursive: true, force: true });
+      fail("RUNTIME_INSTALL_FAILED", "Project Graph CLI runtime could not be installed.");
+    }
+  }
+  await rm(stagingRoot, { recursive: true, force: true });
 }
 
 const entryPath = join(runtimeRoot, "project-graph.mjs");
