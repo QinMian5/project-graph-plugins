@@ -1,4 +1,5 @@
 import assert from "node:assert/strict";
+import { createHash } from "node:crypto";
 import { lstat, readFile, readdir } from "node:fs/promises";
 import { resolve } from "node:path";
 import { fileURLToPath } from "node:url";
@@ -39,6 +40,12 @@ test("the shared Host package contains a self-contained win32-x64 production pay
   assert.equal(provenance.target, "win32-x64");
   assert.deepEqual(provenance.projectGraph, release.projectGraph);
   assert.deepEqual(provenance.ownershipHelper, target.ownershipHelper);
+  assert.equal(
+    createHash("sha256")
+      .update(await readFile(new URL("cli/project-graph-ownership-helper.exe", payloadRoot)))
+      .digest("hex"),
+    target.ownershipHelper.sha256,
+  );
   const runtimePackage = await readJson(new URL("cli/package.json", payloadRoot));
   assert.equal(runtimePackage.version, release.version);
   assert.ok(runtimePackage.dependencies.jsdom);
