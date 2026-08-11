@@ -17,10 +17,15 @@ test("one Integration Release metadata source drives both Host package identitie
 
   assert.deepEqual(release, {
     schemaVersion: 1,
-    version: "0.1.1",
+    version: "0.1.2",
     projectGraph: {
       repository: "https://github.com/QinMian5/project-graph",
       revision: "7d54c924cdda6bec5095b1a8206096ea9843442a",
+    },
+    hostRuntime: {
+      node: ">=26.0.0",
+      packageManager: "npm",
+      installMode: "persistent-plugin-data",
     },
     targets: {
       "darwin-arm64": {
@@ -28,21 +33,11 @@ test("one Integration Release metadata source drives both Host package identitie
           sourcePath: "app/src-tauri/target/debug/project-graph-ownership-helper",
           sha256: "e1c47324bbe801ee8b5b5164129d80343fd75a5f7ea7d47c56ffb165c1f2495d",
         },
-        node: {
-          version: "26.7.0",
-          archive: "node-v26.7.0-darwin-arm64.tar.gz",
-          sha256: "7ee659a7768e641bbfd5360940660b8e8fd0052f77488f365562bac522fc15d4",
-        },
       },
       "win32-x64": {
         ownershipHelper: {
           sourcePath: "app/src-tauri/target/release/project-graph-ownership-helper.exe",
           sha256: "aec1221c854091c9e785bffa7aec392b6ccc43c03913417df18a6aa8af4402ce",
-        },
-        node: {
-          version: "26.7.0",
-          archive: "node-v26.7.0-win-x64.zip",
-          sha256: "d3bd72755141ed32bbcd841228ee81897c8a98d50dfa7dae2179399a0a7c90f8",
         },
       },
     },
@@ -56,6 +51,8 @@ test("one Integration Release metadata source drives both Host package identitie
   assert.equal(codexPlugin.version, release.version);
   assert.equal(codexPlugin.homepage, "https://github.com/QinMian5/project-graph-plugins");
   assert.equal(codexPlugin.repository, "https://github.com/QinMian5/project-graph-plugins");
+  assert.deepEqual(codexPlugin.author, { name: "Mian Qin", url: "https://github.com/QinMian5" });
+  assert.equal(codexPlugin.interface.developerName, "Mian Qin");
   assert.equal(codexPlugin.interface.displayName, "Project Graph");
 
   assert.equal(claudeMarketplace.name, "project-graph");
@@ -67,6 +64,8 @@ test("one Integration Release metadata source drives both Host package identitie
   assert.equal(claudePlugin.version, release.version);
   assert.equal(claudePlugin.homepage, "https://github.com/QinMian5/project-graph-plugins");
   assert.equal(claudePlugin.repository, "https://github.com/QinMian5/project-graph-plugins");
+  assert.deepEqual(claudePlugin.author, { name: "Mian Qin", url: "https://github.com/QinMian5" });
+  assert.deepEqual(claudeMarketplace.owner, { name: "Mian Qin", url: "https://github.com/QinMian5" });
 });
 
 test("the release projection command detects and repairs version drift", async () => {

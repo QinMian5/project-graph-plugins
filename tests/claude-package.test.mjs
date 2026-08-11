@@ -4,7 +4,7 @@ import test from "node:test";
 
 const pluginRoot = new URL("../plugins/project-graph/", import.meta.url);
 
-test("the Claude Code package is the self-contained shared Host package", async () => {
+test("the Claude Code package is the shared host-runtime package", async () => {
   const entries = new Set(await readdir(pluginRoot));
   for (const required of [
     ".claude-plugin",
@@ -12,6 +12,7 @@ test("the Claude Code package is the self-contained shared Host package", async 
     "bin",
     "payloads",
     "release-version",
+    "runtime",
     "skills",
   ]) {
     assert.equal(entries.has(required), true, `${required} is missing from the shared Host package`);

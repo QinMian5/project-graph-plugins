@@ -15,12 +15,12 @@ function argument(name, fallback) {
   return value;
 }
 
-function runAdapter(adapterPath, args) {
+function runAdapter(adapterPath, args, environment) {
   const command = process.platform === "win32" ? process.env.ComSpec : adapterPath;
   const commandArguments = process.platform === "win32" ? ["/d", "/c", adapterPath, ...args] : args;
   const result = spawnSync(command, commandArguments, {
     encoding: "utf8",
-    env: { ...process.env, PATH: process.platform === "win32" ? "C:\\no-runtime-path" : "/no-runtime-path" },
+    env: { ...process.env, ...environment },
     maxBuffer: 64 * 1024 * 1024,
   });
   if (result.status === 0 && result.stderr === "") return result.stdout;
@@ -50,7 +50,8 @@ const adapterPath = join(pluginRoot, "bin", process.platform === "win32" ? "proj
 const temporaryDirectory = await mkdtemp(join(tmpdir(), "project-graph-closed-smoke-"));
 
 try {
-  const invoke = (...args) => runAdapter(adapterPath, args);
+  const invoke = (...args) =>
+    runAdapter(adapterPath, args, { PROJECT_GRAPH_PLUGIN_DATA: join(temporaryDirectory, "plugin-data") });
   const version = invoke("--version").trim();
   const tools = parseJson(invoke("tool", "list"), "tool list");
   assert.ok(Array.isArray(tools) && tools.length > 0, "tool list returned no tools");

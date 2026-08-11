@@ -1,27 +1,19 @@
 {
-  "integrationRelease": "0.1.1",
+  "integrationRelease": "0.1.2",
   "target": "darwin-arm64",
   "projectGraph": {
     "repository": "https://github.com/QinMian5/project-graph",
     "revision": "7d54c924cdda6bec5095b1a8206096ea9843442a"
   },
-  "node": {
-    "version": "26.7.0",
-    "archive": "node-v26.7.0-darwin-arm64.tar.gz",
-    "sha256": "7ee659a7768e641bbfd5360940660b8e8fd0052f77488f365562bac522fc15d4",
-    "source": "https://nodejs.org/dist/v26.7.0/node-v26.7.0-darwin-arm64.tar.gz",
-    "transformations": [
-      "strip -u -r preserving napi_, node_api_, node_module_, and uv_ symbols",
-      "codesign --force --sign -"
-    ]
+  "hostRuntime": {
+    "node": ">=26.0.0",
+    "packageManager": "npm",
+    "installMode": "persistent-plugin-data"
   },
   "ownershipHelper": {
     "sourcePath": "app/src-tauri/target/debug/project-graph-ownership-helper",
     "sha256": "e1c47324bbe801ee8b5b5164129d80343fd75a5f7ea7d47c56ffb165c1f2495d"
   },
-  "packageTransformations": [
-    "flatten pnpm production dependencies for Host installation",
-    "remove package-manager command shims"
-  ],
+  "dependencyInstall": "npm ci --omit=dev --include=optional --no-audit --no-fund",
   "materializer": "pnpm --filter @graphif/project-graph materialize:cli"
 }

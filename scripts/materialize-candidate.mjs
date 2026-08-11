@@ -4,17 +4,13 @@ import {
   access,
   chmod,
   constants,
-  cp,
-  copyFile,
   mkdir,
   mkdtemp,
   readFile,
-  readdir,
   rename,
   rm,
   writeFile,
 } from "node:fs/promises";
-import { tmpdir } from "node:os";
 import { join, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
 
@@ -37,8 +33,6 @@ let helperPath;
 const pluginRoot = join(repositoryRoot, "plugins/project-graph");
 const payloadParent = join(pluginRoot, "payloads");
 const payloadRoot = join(payloadParent, target ?? "unsupported");
-const downloadDirectory = await mkdtemp(join(tmpdir(), "project-graph-node-runtime-"));
-const runtimeSymbolPrefixes = ["_napi_", "_node_api_", "_node_module_", "_uv_"];
 let stagingRoot;
 
 function run(command, args, options = {}) {
@@ -50,17 +44,20 @@ function run(command, args, options = {}) {
   });
   if (result.status === 0) return result.stdout;
   throw new Error(
-    `${command} failed with status ${String(result.status)}\n${result.stdout}${result.stderr}`.trimEnd(),
+    `${command} failed with status ${String(result.status)}\n${result.error?.message ?? ""}${result.stdout ?? ""}${result.stderr ?? ""}`.trimEnd(),
   );
 }
 
-async function removePackageManagerCommandShims(directory) {
-  for (const entry of await readdir(directory, { withFileTypes: true })) {
-    if (!entry.isDirectory()) continue;
-    const path = join(directory, entry.name);
-    if (entry.name === ".bin") await rm(path, { recursive: true, force: true });
-    else await removePackageManagerCommandShims(path);
+function runNpm(args, options = {}) {
+  if (process.platform === "win32") {
+    return run(process.env.ComSpec ?? "cmd.exe", ["/d", "/c", "npm.cmd", ...args], options);
   }
+  return run("npm", args, options);
+}
+
+function npmVersion(version) {
+  const peerSuffix = version.indexOf("(");
+  return peerSuffix === -1 ? version : version.slice(0, peerSuffix);
 }
 
 try {
@@ -89,55 +86,11 @@ try {
 
   await mkdir(payloadParent, { recursive: true });
   stagingRoot = await mkdtemp(join(payloadParent, `.${target}-`));
-  await Promise.all([
-    mkdir(join(stagingRoot, "bin"), { recursive: true }),
-    mkdir(join(stagingRoot, "licenses"), { recursive: true }),
-  ]);
-
-  const nodeUrl = `https://nodejs.org/dist/v${targetMetadata.node.version}/${targetMetadata.node.archive}`;
-  const response = await fetch(nodeUrl);
-  if (!response.ok) throw new Error(`Node download failed with status ${response.status}`);
-  const archive = Buffer.from(await response.arrayBuffer());
-  const archiveHash = createHash("sha256").update(archive).digest("hex");
-  if (archiveHash !== targetMetadata.node.sha256) throw new Error("Node archive checksum does not match release metadata");
-  const archivePath = join(downloadDirectory, targetMetadata.node.archive);
-  await writeFile(archivePath, archive);
-  if (target === "darwin-arm64") {
-    run("/usr/bin/tar", ["-xzf", archivePath, "-C", downloadDirectory]);
-  } else {
-    run("tar.exe", ["-xf", archivePath, "-C", downloadDirectory]);
-  }
-
-  const extractedNodeRoot = join(
-    downloadDirectory,
-    targetMetadata.node.archive.replace(/\.(?:tar\.gz|zip)$/, ""),
-  );
-  const bundledNodePath = join(stagingRoot, target === "darwin-arm64" ? "bin/node" : "bin/node.exe");
-  await copyFile(
-    join(extractedNodeRoot, target === "darwin-arm64" ? "bin/node" : "node.exe"),
-    bundledNodePath,
-  );
-  await chmod(bundledNodePath, 0o755);
-  const nodeTransformations = [];
-  if (target === "darwin-arm64") {
-    const runtimeSymbols = run("/usr/bin/nm", ["-gj", bundledNodePath])
-      .split("\n")
-      .filter((symbol) => runtimeSymbolPrefixes.some((prefix) => symbol.startsWith(prefix)))
-      .sort();
-    if (runtimeSymbols.length === 0) throw new Error("Node runtime symbol allowlist is empty");
-    const runtimeSymbolsPath = join(downloadDirectory, "runtime-symbols.txt");
-    await writeFile(runtimeSymbolsPath, `${runtimeSymbols.join("\n")}\n`);
-    run("/usr/bin/strip", ["-u", "-r", "-s", runtimeSymbolsPath, bundledNodePath]);
-    run("/usr/bin/codesign", ["--force", "--sign", "-", bundledNodePath]);
-    nodeTransformations.push(
-      "strip -u -r preserving napi_, node_api_, node_module_, and uv_ symbols",
-      "codesign --force --sign -",
-    );
-  }
-  await copyFile(join(extractedNodeRoot, "LICENSE"), join(stagingRoot, "licenses/node-LICENSE"));
-  await copyFile(
-    join(projectGraphRoot, "app/LICENSE"),
+  await mkdir(join(stagingRoot, "licenses"), { recursive: true });
+  await writeFile(join(stagingRoot, "VERSION"), `${release.version}\n`);
+  await writeFile(
     join(stagingRoot, "licenses/project-graph-GPL-3.0.txt"),
+    await readFile(join(projectGraphRoot, "app/LICENSE")),
   );
 
   run(
@@ -153,44 +106,35 @@ try {
     },
   );
 
-  const deployedNodeModulesPath = join(stagingRoot, "cli/node_modules");
-  const flattenedNodeModulesPath = join(stagingRoot, "cli/node_modules.flattened");
-  await cp(join(deployedNodeModulesPath, ".pnpm/node_modules"), flattenedNodeModulesPath, {
-    recursive: true,
-    dereference: true,
-    preserveTimestamps: true,
-  });
-  const runtimePackage = JSON.parse(await readFile(join(stagingRoot, "cli/package.json"), "utf8"));
-  for (const dependency of Object.keys(runtimePackage.dependencies ?? {})) {
-    await cp(join(deployedNodeModulesPath, dependency), join(flattenedNodeModulesPath, dependency), {
-      recursive: true,
-      dereference: true,
-      preserveTimestamps: true,
-      force: true,
-    });
-  }
-  await rm(deployedNodeModulesPath, { recursive: true, force: true });
-  await rename(flattenedNodeModulesPath, deployedNodeModulesPath);
-  await removePackageManagerCommandShims(deployedNodeModulesPath);
+  const cliRoot = join(stagingRoot, "cli");
+  const runtimePackagePath = join(cliRoot, "package.json");
+  const runtimePackage = JSON.parse(await readFile(runtimePackagePath, "utf8"));
+  runtimePackage.dependencies = Object.fromEntries(
+    Object.entries(runtimePackage.dependencies ?? {}).map(([name, version]) => [name, npmVersion(version)]),
+  );
+  runtimePackage.engines = { node: release.hostRuntime.node };
+  await writeFile(runtimePackagePath, `${JSON.stringify(runtimePackage, null, 2)}\n`);
+  await rm(join(cliRoot, "node_modules"), { recursive: true, force: true });
+  await rm(join(cliRoot, "pnpm-lock.yaml"), { force: true });
+  await rm(join(cliRoot, "pnpm-workspace.yaml"), { force: true });
+  runNpm(
+    ["install", "--package-lock-only", "--ignore-scripts", "--omit=dev", "--include=optional", "--no-audit", "--no-fund"],
+    { cwd: cliRoot },
+  );
 
+  const helperName = target === "win32-x64" ? "project-graph-ownership-helper.exe" : "project-graph-ownership-helper";
+  await chmod(join(cliRoot, helperName), 0o755);
   const provenance = {
     integrationRelease: release.version,
     target,
     projectGraph: release.projectGraph,
-    node: {
-      ...targetMetadata.node,
-      source: nodeUrl,
-      transformations: nodeTransformations,
-    },
+    hostRuntime: release.hostRuntime,
     ownershipHelper: targetMetadata.ownershipHelper,
-    packageTransformations: [
-      "flatten pnpm production dependencies for Host installation",
-      "remove package-manager command shims",
-    ],
+    dependencyInstall: "npm ci --omit=dev --include=optional --no-audit --no-fund",
     materializer: "pnpm --filter @graphif/project-graph materialize:cli",
   };
-  await writeFile(join(stagingRoot, "VERSION"), `${release.version}\n`);
   await writeFile(join(stagingRoot, "provenance.json"), `${JSON.stringify(provenance, null, 2)}\n`);
+
   const previousPayloadRoot = join(payloadParent, `.${target}-previous-${String(process.pid)}`);
   let previousPayloadMoved = false;
   try {
@@ -213,5 +157,4 @@ try {
   process.exitCode = 1;
 } finally {
   if (stagingRoot) await rm(stagingRoot, { recursive: true, force: true });
-  await rm(downloadDirectory, { recursive: true, force: true });
 }

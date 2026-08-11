@@ -14,40 +14,11 @@ esac
 adapter_directory=${adapter_path%/*}
 plugin_root=$(CDPATH= cd -- "$adapter_directory/.." && pwd -P)
 
-system_name=$(/usr/bin/uname -s)
-machine_architecture=$(/usr/bin/uname -m)
+node_path=$(command -v node) || fail '{"code":"NODE_RUNTIME_MISSING","message":"Project Graph CLI requires Node.js 26 or newer on PATH."}'
+bootstrap_path=$plugin_root/runtime/bootstrap.mjs
 
-case "$system_name:$machine_architecture" in
-  Darwin:arm64) target=darwin-arm64 ;;
-  *)
-    fail '{"code":"UNSUPPORTED_TARGET","message":"Project Graph CLI has no payload for this platform."}'
-    ;;
-esac
-
-payload_root=$plugin_root/payloads/$target
-node_path=$payload_root/bin/node
-entry_path=$payload_root/cli/project-graph.mjs
-helper_path=$payload_root/cli/project-graph-ownership-helper
-version_path=$plugin_root/release-version
-
-if [ ! -f "$node_path" ] || [ ! -f "$entry_path" ] || [ ! -f "$helper_path" ] || [ ! -r "$version_path" ]; then
-  fail '{"code":"PAYLOAD_MISSING","message":"Project Graph CLI payload is incomplete."}'
-fi
-if [ ! -x "$node_path" ] || [ ! -x "$helper_path" ]; then
-  fail '{"code":"PAYLOAD_NOT_EXECUTABLE","message":"Project Graph CLI payload is not executable."}'
+if [ ! -r "$bootstrap_path" ]; then
+  fail '{"code":"PAYLOAD_MISSING","message":"Project Graph CLI bootstrap is missing."}'
 fi
 
-IFS= read -r expected_version < "$version_path"
-if ! actual_version=$("$node_path" "$entry_path" --version 2>/dev/null); then
-  fail '{"code":"VERSION_MISMATCH","message":"Project Graph CLI payload version does not match the Plugin."}'
-fi
-if [ "$actual_version" != "$expected_version" ]; then
-  fail '{"code":"VERSION_MISMATCH","message":"Project Graph CLI payload version does not match the Plugin."}'
-fi
-
-if [ "$#" -eq 1 ] && [ "$1" = "--version" ]; then
-  printf '%s\n' "$actual_version"
-  exit 0
-fi
-
-exec "$node_path" "$entry_path" "$@"
+exec "$node_path" "$bootstrap_path" "$@"

@@ -1,18 +1,26 @@
 # Project Graph Plugins
 
-Host-native plugin packages for the [Project Graph](https://github.com/graphif/project-graph) CLI.
+Host-native plugin packages for the [Project Graph](https://github.com/QinMian5/project-graph) CLI.
 
-No Integration Release has been promoted to `main` yet. Version `0.1.1` is developed on
-`candidate/v0.1.0`; ordinary unpinned Marketplace users must not follow it until the macOS and
-Windows acceptance sequence is complete. The rejected `v0.1.0` tag remains immutable and is not
-reused because it did not contain the Windows payload.
+Version `0.1.2` uses the standard host-runtime plugin model: the Plugin contains Project Graph CLI
+templates, exact dependency lockfiles, and target-specific ownership helpers, but does not bundle
+Node.js or `node_modules`. The immutable `v0.1.0` and `v0.1.1` tags remain unchanged.
+
+## Runtime requirements
+
+- Node.js 26 or newer and npm must be available on `PATH`.
+- The first CLI invocation requires registry access so `npm ci` can install the locked production
+  dependencies.
+- Dependencies are installed under the Host's persistent Plugin data directory and reused on later
+  invocations. Codex supplies `PLUGIN_DATA`; Claude Code supplies `CLAUDE_PLUGIN_DATA`.
+- No global Project Graph CLI or pnpm installation is required.
 
 ## Candidate installation for Codex
 
 Install the unpublished candidate from the public Integration Repository at its immutable tag:
 
 ```sh
-codex plugin marketplace add QinMian5/project-graph-plugins --ref v0.1.1
+codex plugin marketplace add QinMian5/project-graph-plugins --ref v0.1.2
 codex plugin add project-graph@project-graph
 ```
 
@@ -42,7 +50,7 @@ Claude Code uses the same package root, release version, Shared Skill, adapter, 
 payload. Add the immutable candidate tag and install the Plugin with the default user scope:
 
 ```sh
-claude plugin marketplace add QinMian5/project-graph-plugins@v0.1.1
+claude plugin marketplace add QinMian5/project-graph-plugins@v0.1.2
 claude plugin install project-graph@project-graph
 ```
 
@@ -63,7 +71,7 @@ pnpm trace:claude \
 ## Release materialization
 
 `release.json` is the machine-readable authority for the Integration Release version, exact
-Project Graph revision, targets, ownership-helper checksum, and bundled Node patch version. The
+Project Graph revision, host-runtime requirement, targets, and ownership-helper checksum. The
 GRAPH-44 prerequisite must have produced the helper at the metadata-recorded source path (or pass
 an equivalent verified artifact with `--ownership-helper`). From a sibling checkout of the exact
 Project Graph revision:
@@ -87,8 +95,10 @@ pnpm test
 ```
 
 The resulting shared Host package is under `plugins/project-graph` and contains both
-`darwin-arm64` and `win32-x64`. Runtime invocations use its target-local bundled Node, production CLI
-runtime, native ownership helper, and licenses; they do not use user Node, pnpm, `PATH`, a desktop
-copy, or a downloader.
+`darwin-arm64` and `win32-x64`. Each target payload contains a production CLI template, an exact npm
+lockfile, the native ownership helper, and the Project Graph license. At runtime the adapter uses
+the Host Node.js executable from `PATH`, installs locked production dependencies into persistent
+Plugin data on first use, and executes the cached runtime. Neither Node.js nor `node_modules` is
+committed to the Plugin package.
 
 See [SOURCE.md](SOURCE.md) for provenance and corresponding source information.

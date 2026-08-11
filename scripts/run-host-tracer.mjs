@@ -61,6 +61,7 @@ try {
   const referenceStorePath = join(temporaryDirectory, "references.json");
   const adapterEnvironment = {
     ...process.env,
+    PROJECT_GRAPH_PLUGIN_DATA: join(temporaryDirectory, "plugin-data"),
     PROJECT_GRAPH_REFERENCE_STORE_PATH: referenceStorePath,
   };
   const invoke = (...args) => run(adapterPath, args, { env: adapterEnvironment });

@@ -3,7 +3,7 @@
 This repository and the Project Graph Plugin package are distributed under GPL-3.0-only. The full
 license text is included at the repository root and inside the Plugin package.
 
-`release.json` identifies the exact Project Graph source revision used to materialize each bundled
+`release.json` identifies the exact Project Graph source revision used to materialize each
 production CLI runtime. The corresponding source is published at
 <https://github.com/QinMian5/project-graph/tree/integration/v0.1.1-source>. The materializer refuses a
 different revision or a dirty Project Graph worktree.
@@ -13,16 +13,15 @@ Project Graph checkout. Materialization refuses a helper whose bytes do not matc
 record, preventing an unverified pre-existing build artifact from being attributed to the source
 revision.
 
-The bundled Node runtime comes from the official target archive URL and SHA-256 recorded in
-`release.json`. To keep the macOS executable below the Git repository single-file limit, the
-materializer retains only symbols needed at runtime with `strip -u -r`, then applies an ad-hoc macOS
-signature required to run the modified arm64 Mach-O. The Windows executable is retained byte-for-byte
-from the verified official archive. The original Node license and third-party notices are included
-with each payload.
+Node.js is not redistributed by this repository or the Plugin. `release.json` records the supported
+Host Node.js range. The adapter uses the Node.js and npm executables already available on the Host's
+`PATH`.
 
-The production dependencies are flattened during materialization because Codex Marketplace
-installation does not preserve pnpm's package symlinks.
+Materialization converts the production dependency declaration into a target-specific npm
+`package-lock.json`. On first use, the Plugin copies the CLI template into the Host's persistent
+Plugin data directory and runs the recorded `npm ci` command there. The installed `node_modules`
+directory is runtime data and is never part of the Plugin package or Git history.
 
-Payload-local `provenance.json` records the Integration Release, target, Project Graph source, Node
-source archive, checksum, and target-specific transformations. Reproduce it with the materialization
-commands in the README from the exact source revision on the recorded target OS.
+Payload-local `provenance.json` records the Integration Release, target, Project Graph source,
+host-runtime contract, ownership helper, and dependency installation command. Reproduce it with the
+materialization commands in the README from the exact source revision on the recorded target OS.

@@ -1,13 +1,16 @@
 ---
 name: project-graph
-description: Use the bundled Project Graph CLI to discover or invoke built-in tools against an explicit .prg Project Path. Use when a user wants to inspect or change a Project Graph project, or inspect the CLI tool catalog and schemas.
+description: Use the Project Graph CLI to discover or invoke built-in tools against an explicit .prg Project Path. Use when a user wants to inspect or change a Project Graph project, or inspect the CLI tool catalog and schemas.
 ---
 
 # Use Project Graph
 
 Resolve `../../bin/project-graph` relative to this `SKILL.md` on macOS, or
-`../../bin/project-graph.cmd` on Windows, and run that adapter. The adapter selects the package-local
-payload. Do not ask the user to install a CLI, Node.js, pnpm, or change `PATH`.
+`../../bin/project-graph.cmd` on Windows, and run that adapter. The adapter uses Node.js 26 or newer
+from `PATH` and installs pinned production dependencies into persistent Plugin data on first use.
+Do not install a global Project Graph CLI or pnpm. If the adapter reports a missing or unsupported
+Node.js runtime, surface that requirement to the user instead of changing their environment without
+permission.
 
 Before a project invocation, obtain an explicit `.prg` Project Path from the user or task context.
 Treat the path as invocation input. Do not infer it from the foreground window, active tab, current

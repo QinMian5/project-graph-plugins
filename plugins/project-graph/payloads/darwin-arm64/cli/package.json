@@ -1,15 +1,18 @@
 {
   "name": "@graphif/project-graph-cli-runtime",
   "private": true,
-  "version": "0.1.1",
+  "version": "0.1.2",
   "type": "module",
   "files": [
     "package.json"
   ],
   "dependencies": {
-    "jsdom": "29.1.1(@noble/hashes@2.2.0)",
-    "sharp": "0.35.3(@types/node@25.9.2)"
+    "jsdom": "29.1.1",
+    "sharp": "0.35.3"
   },
   "devDependencies": {},
-  "optionalDependencies": {}
+  "optionalDependencies": {},
+  "engines": {
+    "node": ">=26.0.0"
+  }
 }

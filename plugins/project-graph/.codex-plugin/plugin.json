@@ -1,10 +1,10 @@
 {
   "name": "project-graph",
-  "version": "0.1.1",
-  "description": "Use Project Graph built-in tools through a self-contained local CLI.",
+  "version": "0.1.2",
+  "description": "Use Project Graph built-in tools through a host-runtime local CLI.",
   "author": {
-    "name": "Graphif",
-    "url": "https://github.com/graphif"
+    "name": "Mian Qin",
+    "url": "https://github.com/QinMian5"
   },
   "homepage": "https://github.com/QinMian5/project-graph-plugins",
   "repository": "https://github.com/QinMian5/project-graph-plugins",
@@ -13,8 +13,8 @@
   "interface": {
     "displayName": "Project Graph",
     "shortDescription": "Inspect and edit explicit Project Graph projects.",
-    "longDescription": "Discover Project Graph built-in tools dynamically, then invoke them through the bundled CLI against an explicit .prg Project Path.",
-    "developerName": "Graphif",
+    "longDescription": "Discover Project Graph built-in tools dynamically, then invoke them through a host Node.js CLI against an explicit .prg Project Path.",
+    "developerName": "Mian Qin",
     "category": "Productivity",
     "capabilities": [
       "Local CLI",
