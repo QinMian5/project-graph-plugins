@@ -17,10 +17,10 @@ test("one Integration Release metadata source drives both Host package identitie
 
   assert.deepEqual(release, {
     schemaVersion: 1,
-    version: "0.1.8",
+    version: "0.1.9",
     projectGraph: {
       repository: "https://github.com/QinMian5/project-graph",
-      revision: "7a1cebb09ea9c9736f79e3b236e1c1a6c2eaba8f",
+      revision: "e51a3c96850eca587f0f15da84e7392334f46b21",
     },
     hostRuntime: {
       node: ">=22.13.0",
@@ -31,13 +31,13 @@ test("one Integration Release metadata source drives both Host package identitie
       "darwin-arm64": {
         ownershipHelper: {
           sourcePath: "app/src-tauri/target/debug/project-graph-ownership-helper",
-          sha256: "105001bbce022a364ca85ad99854790eacc4d93c847fb98efa18fbab7591f313",
+          sha256: "4e089aaaa6b6b949662cd55ccc382b288a2ff9a4525375a12783698bdf3594ee",
         },
       },
       "win32-x64": {
         ownershipHelper: {
-          sourcePath: "app/src-tauri/target/release/project-graph-ownership-helper.exe",
-          sha256: "0950509cad604770c0fd2d90966d09b8f3273ea9fd8b7b8fdeb6e878971d1801",
+          sourcePath: "app/src-tauri/target/debug/project-graph-ownership-helper.exe",
+          sha256: "72d9eb5d38359dd82d850f7b2320b58e9d2651ffc4cb4282a773c4557c714615",
         },
       },
     },

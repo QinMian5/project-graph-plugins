@@ -1,6 +1,6 @@
 import { t as v4_default } from "./chunks/v4-DD_PkrNo.mjs";
-import { c as prepareBuiltInToolInvocation, n as builtInToolCatalog, o as getBuiltInToolDefinition } from "./chunks/BuiltInToolRegistry-Bc-GWZgp.mjs";
-import { n as canOpenProjectProvideCapabilities, t as canClosedProjectProvideCapabilities } from "./chunks/BuiltInToolRuntimeProfiles-BScINZH6.mjs";
+import { c as prepareBuiltInToolInvocation, n as builtInToolCatalog, o as getBuiltInToolDefinition } from "./chunks/BuiltInToolRegistry-B4jwgOBk.mjs";
+import { n as canOpenProjectProvideCapabilities, t as canClosedProjectProvideCapabilities } from "./chunks/BuiltInToolRuntimeProfiles-Dz_4e43l.mjs";
 import { dirname, join } from "node:path";
 import { fileURLToPath } from "node:url";
 //#region src/core/service/dataManageService/aiEngine/BuiltInToolCliAdapter.ts
@@ -87,7 +87,7 @@ async function runProjectGraphCli(args, options) {
 			return 2;
 		}
 		try {
-			prepareBuiltInToolInvocation(toolName, input, (capabilities) => canClosedProjectProvideCapabilities(capabilities) || canOpenProjectProvideCapabilities(capabilities));
+			prepareBuiltInToolInvocation(toolName, input, (capabilities) => canClosedProjectProvideCapabilities(capabilities) || canOpenProjectProvideCapabilities());
 		} catch {
 			writeError({
 				code: "TOOL_INPUT_INVALID",
@@ -139,8 +139,8 @@ async function runProjectGraphCliProcess(options) {
 //#region src/cli/project-graph-production.ts
 process.env.PROJECT_GRAPH_OWNERSHIP_HELPER_PATH = join(dirname(fileURLToPath(import.meta.url)), process.platform === "win32" ? "project-graph-ownership-helper.exe" : "project-graph-ownership-helper");
 await runProjectGraphCliProcess({
-	version: "0.1.8",
-	loadRuntime: () => import("./chunks/ProjectGraphCliProductionRuntime-vV2iZ8vF.mjs")
+	version: "0.1.9",
+	loadRuntime: () => import("./chunks/ProjectGraphCliProductionRuntime-7QM4HsRs.mjs")
 });
 //#endregion
 export {};
