@@ -4,8 +4,9 @@ This repository and the Project Graph Plugin package are distributed under GPL-3
 license text is included at the repository root and inside the Plugin package.
 
 `release.json` identifies the exact Project Graph source revision used to materialize each
-production CLI runtime. Candidate `0.1.9` is materialized from the exact local revision recorded
-there. The materializer refuses a different revision or a dirty Project Graph worktree.
+production CLI runtime. Release `0.1.9` is materialized from the exact revision published at
+<https://github.com/QinMian5/project-graph/tree/integration/v0.1.9-source>. The materializer refuses
+a different revision or a dirty Project Graph worktree.
 
 The target metadata also pins the ownership helper by SHA-256 and records its path in the exact
 Project Graph checkout. Materialization refuses a helper whose bytes do not match that Release

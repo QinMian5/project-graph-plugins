@@ -4,7 +4,7 @@ Host-native plugin packages for the [Project Graph](https://github.com/QinMian5/
 
 Version `0.1.9` uses the standard host-runtime plugin model: the Plugin contains Project Graph CLI
 templates, exact dependency lockfiles, and target-specific ownership helpers, but does not bundle
-Node.js or `node_modules`. The immutable `v0.1.0` through `v0.1.7` tags remain unchanged.
+Node.js or `node_modules`. The immutable `v0.1.0` through `v0.1.8` tags remain unchanged.
 
 ## Runtime requirements
 
